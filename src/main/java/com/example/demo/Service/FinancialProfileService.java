@@ -1,2 +1,4 @@
 package com.example.demo.Service;
-public class FinancialProfileService
+public class FinancialProfileService{
+    
+}
