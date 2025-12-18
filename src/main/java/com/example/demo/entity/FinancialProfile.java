@@ -1,2 +1,4 @@
 pacakage com.example.demo.entity;
-public class Financial
+public class FinancialProfile{
+    
+}
