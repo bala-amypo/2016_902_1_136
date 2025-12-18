@@ -1,2 +1,4 @@
 package com.example.demo.Service.Impl;
-public class 
+public class FinancialProfileServiceImpl implements FinancialProfileService{
+    
+}
