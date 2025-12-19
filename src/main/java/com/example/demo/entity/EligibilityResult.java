@@ -40,4 +40,5 @@ public class EligibilityResult{
     public void setMaxEligibleAmount(Double maxEligibleAmount){
         this.maxEligibleAmount=maxEligibleAmount;
     }
+    public 
 }
