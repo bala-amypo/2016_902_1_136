@@ -17,6 +17,13 @@ public class EligibilityResult{
     private Timestamp calculatedAt;
 
     public Long getId(){
-
+        return id;
     }
+    public void setId(Long id){
+        this.id=id;
+    }
+    public String getLoanRequest(){
+        return loanRequest;
+    }
+    public void setLoanRequest(String )
 }
