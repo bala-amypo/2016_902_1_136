@@ -16,4 +16,9 @@ public class FinancialProfile{
     private Double savingsBalance;
     private Timestamp lastUpdatedAt;
 
+    public Long getId(){
+        return id;
+    }
+    public void setId(Long id)
+
 }
