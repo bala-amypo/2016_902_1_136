@@ -34,5 +34,10 @@ public class EligibilityResult{
     public void setIsEligible(Boolean isEligible){
         this.isEligible=isEligible;
     }
-    public Double getmax
+    public Double getMaxEligibleAmount(){
+        return maxEligibleAmount;
+    }
+    public void setMaxEligibleAmount(Double maxEligibleAmount){
+        this.maxEligibleAmount=maxEligibleAmount;
+    }
 }
