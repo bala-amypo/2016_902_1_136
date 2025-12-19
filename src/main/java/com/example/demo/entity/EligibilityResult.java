@@ -25,5 +25,14 @@ public class EligibilityResult{
     public String getLoanRequest(){
         return loanRequest;
     }
-    public void setLoanRequest(String )
+    public void setLoanRequest(String loanRequest){
+        this.loanRequest=loanRequest;
+    }
+    public Boolean getIsEligible(){
+        return isEligible;
+    }
+    public void setIsEligible(Boolean isEligible){
+        this.isEligible=isEligible;
+    }
+    public D
 }
