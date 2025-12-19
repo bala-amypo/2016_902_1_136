@@ -9,6 +9,8 @@ public class FinancialProfile{
     @GenerativedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private String user;
-    private
+    private Double monthlyIncome;
+    private Double monthlyExpenses;
+    private Double 
 
 }
