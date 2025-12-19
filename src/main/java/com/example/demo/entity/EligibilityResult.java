@@ -64,6 +64,6 @@ public class EligibilityResult{
     public void setCalculateAt(Timestamp calculatedAt){
         this.calculatedAt=calculatedAt;
     }
-    public EligibiltyResult(Long id,String loanRequest,Boolean is)
+    public EligibiltyResult(Long id,String loanRequest,Boolean isEligible,Double maxEligibleAmount,Double estimatedEmi,String risk)
 
 }
