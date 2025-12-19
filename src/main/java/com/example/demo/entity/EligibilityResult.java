@@ -49,20 +49,21 @@ public class EligibilityResult{
     public String getRiskLevel(){
         return riskLevel;
     }
-    public void setriskLevel(string riskLevel){
+    public void setRiskLevel(string riskLevel){
         this.riskLevel=risklevel;
     }
-    public String getrejectionReason(){
+    public String getRejectionReason(){
         return rejectionReason;
     }
-    public void setrejectionReason(String rejectionReason){
+    public void setRejectionReason(String rejectionReason){
         this.rejectionReason=rejectionReason;
     }
-    public Timestamp getcalculatedAt(){
-        return calculatedAt;
+    public Timestamp getCalculatedAt(){
+        return CalculatedAt;
     }
-    public void setcalculateAt(Timestamp calculatedAt){
+    public void setCalculateAt(Timestamp calculatedAt){
         this.calculatedAt=calculatedAt;
     }
+    public EligibiltyResult
 
 }
