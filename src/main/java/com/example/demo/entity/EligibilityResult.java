@@ -34,5 +34,5 @@ public class EligibilityResult{
     public void setIsEligible(Boolean isEligible){
         this.isEligible=isEligible;
     }
-    public D
+    public Double getmax
 }
