@@ -40,5 +40,14 @@ public class EligibilityResult{
     public void setMaxEligibleAmount(Double maxEligibleAmount){
         this.maxEligibleAmount=maxEligibleAmount;
     }
-    public Double
+    public Double getEstimatedEmi(){
+        return EstimatedEmi;
+    }
+    public void setEstimatedEmi(Double EstimatedEmi){
+        this.EstimatedEmi=EstimatedEmi;
+    }
+    public string getriskLevel(){
+        return riskLevel;
+    }
+    public 
 }
