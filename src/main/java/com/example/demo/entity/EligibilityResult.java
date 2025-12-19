@@ -69,7 +69,13 @@ public class EligibilityResult{
         this.loanRequest=loanRequest;
         this.isEligible=isEligible;
         this.maxEligibleAmount=maxEligibleAmount;
-        this.
+        this.estimatedEmi=estimatedEmi;
+        this.riskLevel=riskLevel;
+        this.rejectionReason=rejectionReason;
+        this.calculatedAt=calculatedAt;
+    }
+    public Eligibility(){
+        
     }
 
 }
