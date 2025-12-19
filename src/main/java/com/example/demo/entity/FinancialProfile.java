@@ -11,6 +11,9 @@ public class FinancialProfile{
     private String user;
     private Double monthlyIncome;
     private Double monthlyExpenses;
-    private Double 
+    private Double existingLoanEmi;
+    private Integer creditScore;
+    private Double savingsBalance;
+    private Timestamp lastUpdatedAt;
 
 }
