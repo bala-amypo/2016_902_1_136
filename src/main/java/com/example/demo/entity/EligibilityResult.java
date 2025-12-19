@@ -49,5 +49,11 @@ public class EligibilityResult{
     public string getriskLevel(){
         return riskLevel;
     }
-    public 
+    public void setriskLevel(string riskLevel){
+        this.riskLevel=risklevel;
+    }
+    public string setrejectionReason(){
+        return rejectionReason;
+    }
+    public void getrejectionReason(s)
 }
