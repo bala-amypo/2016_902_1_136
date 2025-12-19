@@ -58,6 +58,11 @@ public class EligibilityResult{
     public void setrejectionReason(String rejectionReason){
         this.rejectionReason=rejectionReason;
     }
-    public Timestamp getcalcu
+    public Timestamp getcalculatedAt(){
+        return calculatedAt;
+    }
+    public void setcalculateAt(Timestamp calculatedAt){
+        this.calculatedAt=calculatedAt;
+    }
 
 }
