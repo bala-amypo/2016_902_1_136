@@ -46,14 +46,18 @@ public class EligibilityResult{
     public void setEstimatedEmi(Double EstimatedEmi){
         this.EstimatedEmi=EstimatedEmi;
     }
-    public string getriskLevel(){
+    public String getriskLevel(){
         return riskLevel;
     }
     public void setriskLevel(string riskLevel){
         this.riskLevel=risklevel;
     }
-    public string setrejectionReason(){
+    public String getrejectionReason(){
         return rejectionReason;
     }
-    public void getrejectionReason(s)
+    public void setrejectionReason(String rejectionReason){
+        this.rejectionReason=rejectionReason;
+    }
+    public Timestamp getcalcu
+
 }
