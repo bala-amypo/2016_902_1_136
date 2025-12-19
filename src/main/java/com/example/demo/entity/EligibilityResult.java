@@ -1,4 +1,8 @@
 package com.example.demo.entity;
 public class EligibilityResult{
-    private Long id
+    @OneToOneLoanRequest
+    private Long id;
+    private String loanRequest;
+    private Boolean isEligibleAmount;
+    private Double
 }
