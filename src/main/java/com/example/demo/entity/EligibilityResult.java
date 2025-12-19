@@ -64,6 +64,6 @@ public class EligibilityResult{
     public void setCalculateAt(Timestamp calculatedAt){
         this.calculatedAt=calculatedAt;
     }
-    public EligibiltyResult
+    public EligibiltyResult()
 
 }
