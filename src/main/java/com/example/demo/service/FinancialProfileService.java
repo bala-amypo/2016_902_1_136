@@ -1,5 +1,10 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.FinancialProfile;
+
 public interface FinancialProfileService {
-    String getFinancialStatus(Long userId);
+
+    FinancialProfile createOrUpdateProfile(FinancialProfile profile);
+
+    FinancialProfile getProfileByUser(Long userId);
 }
