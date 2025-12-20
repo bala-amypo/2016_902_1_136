@@ -1,24 +1,13 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.User;
-import com.example.demo.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @PostMapping("/register")
-    public User register(@RequestBody User user) {
-        return userRepository.save(user);
-    }
-
-    @GetMapping("/{id}")
-    public User getUser(@PathVariable Long id) {
-        return userRepository.findById(id).orElse(null);
+    @GetMapping("/test")
+    public String test() {
+        return "Spring Boot is working!";
     }
 }
