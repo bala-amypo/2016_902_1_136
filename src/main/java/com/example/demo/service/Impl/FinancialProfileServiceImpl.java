@@ -1,26 +1,21 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.FinancialProfile;
-import com.example.demo.repository.FinancialProfileRepository;
 import com.example.demo.service.FinancialProfileService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FinancialProfileServiceImpl implements FinancialProfileService {
 
-    private final FinancialProfileRepository repository;
-
-    public FinancialProfileServiceImpl(FinancialProfileRepository repository) {
-        this.repository = repository;
+    @Override
+    public FinancialProfile createOrUpdateProfile(FinancialProfile profile) {
+        // TODO: Implement saving logic
+        return profile;
     }
 
     @Override
-    public FinancialProfile saveOrUpdateProfile(FinancialProfile profile) {
-        return repository.save(profile);
-    }
-
-    @Override
-    public FinancialProfile getProfileByUserId(Long userId) {
-        return repository.findByUserId(userId);
+    public FinancialProfile getProfileByUser(Long userId) {
+        // TODO: Implement fetch logic
+        return new FinancialProfile(); // placeholder
     }
 }
