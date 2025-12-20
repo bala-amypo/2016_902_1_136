@@ -1,30 +1,88 @@
-pacakage com.example.demo.entity;
-import java.Time.*;
+package com.example.demo.entity;
+
 import jakarta.persistence.*;
+import java.time.Instant;
 
 @Entity
-public class FinancialProfile{
-    @OneToOneUser
-    @Id;
-    @GenerativedValue(strategy=GenerationType.IDENTITY)
+public class FinancialProfile {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String user;
+
+    @OneToOne
+    private User user;
+
     private Double monthlyIncome;
     private Double monthlyExpenses;
     private Double existingLoanEmi;
     private Integer creditScore;
     private Double savingsBalance;
-    private Timestamp lastUpdatedAt;
 
-    public Long getId(){
+    private Instant lastUpdatedAt = Instant.now();
+
+    // Getters and Setters
+    public Long getId() {
         return id;
     }
-    public void setId(Long id){
-        this.id=id;
+
+    public void setId(Long id) {
+        this.id = id;
     }
-    public String getUser(){
+
+    public User getUser() {
         return user;
     }
-    public 
+ 
+    public void setUser(User user) {
+        this.user = user;
+    }
 
+    public Double getMonthlyIncome() {
+        return monthlyIncome;
+    }
+
+    public void setMonthlyIncome(Double monthlyIncome) {
+        this.monthlyIncome = monthlyIncome;
+    }
+
+    public Double getMonthlyExpenses() {
+        return monthlyExpenses;
+    }
+
+    public void setMonthlyExpenses(Double monthlyExpenses) {
+        this.monthlyExpenses = monthlyExpenses;
+    }
+
+    public Double getExistingLoanEmi() {
+        return existingLoanEmi;
+    }
+
+    public void setExistingLoanEmi(Double existingLoanEmi) {
+        this.existingLoanEmi = existingLoanEmi;
+    }
+
+    public Integer getCreditScore() {
+        return creditScore;
+    }
+
+    public void setCreditScore(Integer creditScore) {
+        this.creditScore = creditScore;
+    }
+
+    public Double getSavingsBalance() {
+        return savingsBalance;
+    }
+
+    public void setSavingsBalance(Double savingsBalance) {
+        this.savingsBalance = savingsBalance;
+    }
+
+    public Instant getLastUpdatedAt() {
+        return lastUpdatedAt;
+    }
+
+    public void setLastUpdatedAt(Instant lastUpdatedAt) {
+        this.lastUpdatedAt = lastUpdatedAt;
+    }
 }
