@@ -2,15 +2,15 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.EligibilityResult;
 import com.example.demo.repository.EligibilityResultRepository;
-import com.example.demo.service.EligibilityService;
+import com.example.demo.service.LoanEligibilityService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EligibilityServiceImpl implements EligibilityService {
+public class LoanEligibilityServiceImpl implements LoanEligibilityService {
 
     private final EligibilityResultRepository repository;
 
-    public EligibilityServiceImpl(EligibilityResultRepository repository) {
+    public LoanEligibilityServiceImpl(EligibilityResultRepository repository) {
         this.repository = repository;
     }
 
