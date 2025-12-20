@@ -8,7 +8,6 @@ public class RiskAssessmentLogServiceImpl implements RiskAssessmentLogService {
 
     @Override
     public void logRisk(Long loanRequestId, String riskLevel) {
-        System.out.println("Risk logged for LoanRequest " + loanRequestId +
-                " with risk level: " + riskLevel);
+        System.out.println("Risk logged: " + loanRequestId + " | " + riskLevel);
     }
 }
