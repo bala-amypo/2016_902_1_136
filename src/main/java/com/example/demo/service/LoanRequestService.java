@@ -1,15 +1,10 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.LoanRequest;
-import java.util.List;
 
 public interface LoanRequestService {
 
-    LoanRequest submitLoanRequest(LoanRequest request);
+    LoanRequest applyLoan(LoanRequest loanRequest);
 
-    List<LoanRequest> getRequestsByUser(Long userId);
-
-    LoanRequest getRequestById(Long id);
-
-    List<LoanRequest> getAllRequests();
+    LoanRequest getLoanStatus(Long loanId);
 }

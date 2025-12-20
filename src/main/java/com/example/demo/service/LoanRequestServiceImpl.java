@@ -1,32 +1,26 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
 import com.example.demo.entity.LoanRequest;
-import com.example.demo.service.LoanRequestService;
+import com.example.demo.repository.LoanRequestRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
-import java.util.List;
 
 @Service
 public class LoanRequestServiceImpl implements LoanRequestService {
 
-    @Override
-    public LoanRequest submitLoanRequest(LoanRequest request) {
-        return request;
+    private final LoanRequestRepository repository;
+
+    public LoanRequestServiceImpl(LoanRequestRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public List<LoanRequest> getRequestsByUser(Long userId) {
-        return Collections.emptyList();
+    public LoanRequest applyLoan(LoanRequest loanRequest) {
+        loanRequest.setStatus("PENDING");
+        return repository.save(loanRequest);
     }
 
     @Override
-    public LoanRequest getRequestById(Long id) {
-        return null;
-    }
-
-    @Override
-    public List<LoanRequest> getAllRequests() {
-        return Collections.emptyList();
+    public LoanRequest getLoanStatus(Long loanId) {
+        return repository.findById(loanId).orElse(null);
     }
 }

@@ -1,22 +1,31 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
 import com.example.demo.entity.RiskAssessmentLog;
-import com.example.demo.service.RiskAssessmentLogService;
+import com.example.demo.repository.RiskAssessmentLogRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
-import java.util.List;
 
 @Service
 public class RiskAssessmentLogServiceImpl implements RiskAssessmentLogService {
 
-    @Override
-    public void logRisk(Long loanRequestId, String riskLevel) {
-        System.out.println("Risk logged");
+    private final RiskAssessmentLogRepository repository;
+
+    public RiskAssessmentLogServiceImpl(RiskAssessmentLogRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public List<RiskAssessmentLog> getLogsByRequest(Long loanRequestId) {
-        return Collections.emptyList();
+    public RiskAssessmentLog saveRiskLog(RiskAssessmentLog log) {
+        return repository.save(log);
+    }
+
+    @Override
+    public String evaluateRisk(int creditScore) {
+
+        if (creditScore >= 750) {
+            return "LOW RISK";
+        } else if (creditScore >= 650) {
+            return "MEDIUM RISK";
+        }
+        return "HIGH RISK";
     }
 }

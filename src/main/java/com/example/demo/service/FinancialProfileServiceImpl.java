@@ -1,19 +1,25 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
 import com.example.demo.entity.FinancialProfile;
-import com.example.demo.service.FinancialProfileService;
+import com.example.demo.repository.FinancialProfileRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FinancialProfileServiceImpl implements FinancialProfileService {
 
-    @Override
-    public FinancialProfile createOrUpdateProfile(FinancialProfile profile) {
-        return profile;
+    private final FinancialProfileRepository repository;
+
+    public FinancialProfileServiceImpl(FinancialProfileRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public FinancialProfile getProfileByUser(Long userId) {
-        return null;
+    public FinancialProfile saveProfile(FinancialProfile profile) {
+        return repository.save(profile);
+    }
+
+    @Override
+    public FinancialProfile getProfileByUserId(Long userId) {
+        return repository.findById(userId).orElse(null);
     }
 }
