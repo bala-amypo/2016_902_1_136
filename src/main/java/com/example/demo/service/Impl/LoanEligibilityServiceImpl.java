@@ -6,14 +6,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class LoanEligibilityServiceImpl implements LoanEligibilityService {
+    @Override
+    public EligibilityResult evaluateEligibility(Long loanRequestId) { ... }
 
     @Override
-    public EligibilityResult evaluateEligibility(Long loanRequestId) {
-        return new EligibilityResult(); // placeholder
-    }
-
-    @Override
-    public EligibilityResult getResultByRequest(Long loanRequestId) {
-        return new EligibilityResult(); // placeholder
-    }
+    public EligibilityResult getResultByRequest(Long loanRequestId) { ... }
 }
