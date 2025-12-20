@@ -2,34 +2,19 @@ package com.example.demo.entity;
 
 public class EligibilityResult {
 
-    private Long loanRequestId;
-    private Boolean eligible;
-    private String remarks;
+    private boolean eligible;
+    private String message;
 
-    public EligibilityResult() {
-    }
+    public EligibilityResult() {}
 
-    public Long getLoanRequestId() {
-        return loanRequestId;
-    }
-
-    public void setLoanRequestId(Long loanRequestId) {
-        this.loanRequestId = loanRequestId;
-    }
-
-    public Boolean getEligible() {
-        return eligible;
-    }
-
-    public void setEligible(Boolean eligible) {
+    public EligibilityResult(boolean eligible, String message) {
         this.eligible = eligible;
+        this.message = message;
     }
 
-    public String getRemarks() {
-        return remarks;
-    }
+    public boolean isEligible() { return eligible; }
+    public void setEligible(boolean eligible) { this.eligible = eligible; }
 
-    public void setRemarks(String remarks) {
-        this.remarks = remarks;
-    }
+    public String getMessage() { return message; }
+    public void setMessage(String message) { this.message = message; }
 }

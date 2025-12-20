@@ -1,7 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 public class RiskAssessmentLog {
@@ -10,49 +10,21 @@ public class RiskAssessmentLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long loanRequestId;
-    private Double dtiRatio;
-    private String creditCheckStatus;
-    private Instant timestamp = Instant.now();
+    private String riskLevel;
+    private LocalDateTime evaluatedAt;
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
- 
-    public void setId(Long id) {
-        this.id = id;
+    public RiskAssessmentLog() {
+        this.evaluatedAt = LocalDateTime.now();
     }
 
-    public Long getLoanRequestId() {
-        return loanRequestId;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setLoanRequestId(Long loanRequestId) {
-        this.loanRequestId = loanRequestId;
-    }
+    public String getRiskLevel() { return riskLevel; }
+    public void setRiskLevel(String riskLevel) { this.riskLevel = riskLevel; }
 
-    public Double getDtiRatio() {
-        return dtiRatio;
-    }
-
-    public void setDtiRatio(Double dtiRatio) {
-        this.dtiRatio = dtiRatio;
-    }
-
-    public String getCreditCheckStatus() {
-        return creditCheckStatus;
-    }
-
-    public void setCreditCheckStatus(String creditCheckStatus) {
-        this.creditCheckStatus = creditCheckStatus;
-    }
-
-    public Instant getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Instant timestamp) {
-        this.timestamp = timestamp;
+    public LocalDateTime getEvaluatedAt() { return evaluatedAt; }
+    public void setEvaluatedAt(LocalDateTime evaluatedAt) {
+        this.evaluatedAt = evaluatedAt;
     }
 }

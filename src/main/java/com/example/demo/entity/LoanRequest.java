@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.Instant;
 
 @Entity
 public class LoanRequest {
@@ -10,70 +9,21 @@ public class LoanRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private User user;
+    private double amount;
+    private int tenure;
+    private String status;
 
-    private Double requestedAmount;
-    private Integer tenureMonths;
-    private String purpose;
-    private String status = "PENDING";
+    public LoanRequest() {}
 
-    private Instant appliedAt = Instant.now();
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
- 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public double getAmount() { return amount; }
+    public void setAmount(double amount) { this.amount = amount; }
 
-    public User getUser() {
-        return user;
-    }
- 
-    public void setUser(User user) {
-        this.user = user;
-    }
+    public int getTenure() { return tenure; }
+    public void setTenure(int tenure) { this.tenure = tenure; }
 
-    public Double getRequestedAmount() {
-        return requestedAmount;
-    }
-
-    public void setRequestedAmount(Double requestedAmount) {
-        this.requestedAmount = requestedAmount;
-    }
-
-    public Integer getTenureMonths() {
-        return tenureMonths;
-    }
-
-    public void setTenureMonths(Integer tenureMonths) {
-        this.tenureMonths = tenureMonths;
-    }
-
-    public String getPurpose() {
-        return purpose;
-    }
- 
-    public void setPurpose(String purpose) {
-        this.purpose = purpose;
-    }
-
-    public String getStatus() {
-        return status;
-    }
- 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Instant getAppliedAt() {
-        return appliedAt;
-    }
-
-    public void setAppliedAt(Instant appliedAt) {
-        this.appliedAt = appliedAt;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }
