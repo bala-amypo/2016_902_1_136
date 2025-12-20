@@ -1,28 +1,24 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.EligibilityResult;
-import com.example.demo.service.LoanEligibilityService;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.example.demo.entity.LoanEligibility;
+import com.example.demo.repository.LoanEligibilityRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/eligibility")
-@Tag(name = "Loan Eligibility")
+@RequestMapping("/eligibility")
 public class EligibilityController {
 
-    private final LoanEligibilityService eligibilityService;
+    @Autowired
+    private LoanEligibilityRepository eligibilityRepository;
 
-    public EligibilityController(LoanEligibilityService eligibilityService) {
-        this.eligibilityService = eligibilityService;
+    @PostMapping
+    public LoanEligibility save(@RequestBody LoanEligibility eligibility) {
+        return eligibilityRepository.save(eligibility);
     }
 
-    @PostMapping("/evaluate/{loanRequestId}")
-    public EligibilityResult evaluate(@PathVariable Long loanRequestId) {
-        return eligibilityService.evaluateEligibility(loanRequestId);
-    }
-
-    @GetMapping("/result/{loanRequestId}")
-    public EligibilityResult getResult(@PathVariable Long loanRequestId) {
-        return eligibilityService.getResultByRequest(loanRequestId);
+    @GetMapping("/{id}")
+    public LoanEligibility get(@PathVariable Long id) {
+        return eligibilityRepository.findById(id).orElse(null);
     }
 }

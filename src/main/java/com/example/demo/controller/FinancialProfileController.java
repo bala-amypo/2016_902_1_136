@@ -1,28 +1,24 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.FinancialProfile;
-import com.example.demo.service.FinancialProfileService;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.example.demo.repository.FinancialProfileRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/financial-profiles")
-@Tag(name = "Financial Profile")
+@RequestMapping("/profile")
 public class FinancialProfileController {
 
-    private final FinancialProfileService profileService;
-
-    public FinancialProfileController(FinancialProfileService profileService) {
-        this.profileService = profileService;
-    }
+    @Autowired
+    private FinancialProfileRepository profileRepository;
 
     @PostMapping
-    public FinancialProfile createOrUpdate(@RequestBody FinancialProfile profile) {
-        return profileService.createOrUpdateProfile(profile);
+    public FinancialProfile save(@RequestBody FinancialProfile profile) {
+        return profileRepository.save(profile);
     }
 
-    @GetMapping("/user/{userId}")
-    public FinancialProfile getByUser(@PathVariable Long userId) {
-        return profileService.getProfileByUser(userId);
+    @GetMapping("/{id}")
+    public FinancialProfile get(@PathVariable Long id) {
+        return profileRepository.findById(id).orElse(null);
     }
 }
