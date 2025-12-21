@@ -1,20 +1,51 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "eligibility_result")
 public class EligibilityResult {
 
-    private boolean eligible;
-    private String message;
+    @Id
+    private Long id;
 
+    private String status;
+
+    private Double amount;
+
+    // 🔹 Constructors
     public EligibilityResult() {}
 
-    public EligibilityResult(boolean eligible, String message) {
-        this.eligible = eligible;
-        this.message = message;
+    public EligibilityResult(Long id, String status, Double amount) {
+        this.id = id;
+        this.status = status;
+        this.amount = amount;
     }
 
-    public boolean isEligible() { return eligible; }
-    public void setEligible(boolean eligible) { this.eligible = eligible; }
+    // 🔹 Getters & Setters
+    public Long getId() {
+        return id;
+    }
 
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
 }
