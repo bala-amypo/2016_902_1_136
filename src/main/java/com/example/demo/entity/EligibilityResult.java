@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -9,43 +11,34 @@ import jakarta.persistence.Table;
 public class EligibilityResult {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status;
+    private boolean eligible;
 
-    private Double amount;
+    private String message;
 
     // 🔹 Constructors
     public EligibilityResult() {}
-
-    public EligibilityResult(Long id, String status, Double amount) {
-        this.id = id;
-        this.status = status;
-        this.amount = amount;
-    }
 
     // 🔹 Getters & Setters
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public boolean isEligible() {
+        return eligible;
     }
 
-    public String getStatus() {
-        return status;
+    public void setEligible(boolean eligible) {
+        this.eligible = eligible;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public String getMessage() {
+        return message;
     }
 
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
