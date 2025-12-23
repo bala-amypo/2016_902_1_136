@@ -18,10 +18,10 @@ public class EligibilityResult {
 
     private String message;
 
-    // 🔹 Constructors
+    
     public EligibilityResult() {}
 
-    // 🔹 Getters & Setters
+
     public Long getId() {
         return id;
     }
