@@ -13,33 +13,37 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    
-    private final UserService userService;
-    private final JwtUtil jwtUtil;
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    
+
     @Autowired
-    public AuthController(UserService userService, JwtUtil jwtUtil) {
-        this.userService = userService;
-        this.jwtUtil = jwtUtil;
+    private UserService userService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userService.save(user);
+        return ResponseEntity.ok("User registered successfully");
     }
-    
+
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest authRequest) {
-        User user = userService.findByEmail(authRequest.getEmail());
-        
-        if (!passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
-            throw new com.example.demo.exception.BadRequestException("Invalid credentials");
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+
+        User user = userService.findByEmail(request.getEmail());
+
+        if (user == null ||
+            !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            return ResponseEntity.status(401).build();
         }
-        
+
         String token = jwtUtil.generateToken(user);
-        AuthResponse response = new AuthResponse(
-            token, 
-            user.getEmail(), 
-            user.getRole(), 
-            user.getId()
+
+        return ResponseEntity.ok(
+                new AuthResponse(token, user.getRole(), user.getEmail())
         );
-        
-        return ResponseEntity.ok(response);
     }
 }
