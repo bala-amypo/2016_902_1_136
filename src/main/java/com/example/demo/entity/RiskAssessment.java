@@ -1,89 +1,86 @@
-// package com.example.demo.entity;
-
-// import jakarta.persistence.*;
-// import java.time.LocalDateTime;
-
-// @Entity
-// public class RiskAssessmentLog {
-
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     private Long id;
-
-//     private String riskLevel;
-//     private LocalDateTime evaluatedAt;
-
-//     public RiskAssessmentLog() {
-//         this.evaluatedAt = LocalDateTime.now();
-//     }
-
-//     public Long getId() { return id; }
-//     public void setId(Long id) { this.id = id; }
-
-//     public String getRiskLevel() { return riskLevel; }
-//     public void setRiskLevel(String riskLevel) { this.riskLevel = riskLevel; }
-
-//     public LocalDateTime getEvaluatedAt() { return evaluatedAt; }
-//     public void setEvaluatedAt(LocalDateTime evaluatedAt) {
-//         this.evaluatedAt = evaluatedAt;
-//     }
-// }
-
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "risk_assessment")
 public class RiskAssessment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long loanRequestId;
-    private Double dtiRatio;
-    private String creditCheckStatus;
+    private String userId;          // ID of the user this risk assessment belongs to
+    private double riskScore;       // Risk score
+    private String riskLevel;       // e.g., LOW, MEDIUM, HIGH
+    private String comments;        // Optional comments or notes
 
-    private LocalDateTime timestamp;
+    // Default constructor
+    public RiskAssessment() {
+    }
 
-    // Getters
+    // Parameterized constructor
+    public RiskAssessment(String userId, double riskScore, String riskLevel, String comments) {
+        this.userId = userId;
+        this.riskScore = riskScore;
+        this.riskLevel = riskLevel;
+        this.comments = comments;
+    }
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }
 
-    public Long getLoanRequestId() {
-        return loanRequestId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Double getDtiRatio() {
-        return dtiRatio;
+    public String getUserId() {
+        return userId;
     }
 
-    public String getCreditCheckStatus() {
-        return creditCheckStatus;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
+    public double getRiskScore() {
+        return riskScore;
     }
 
-    // Setters
-    public void setLoanRequestId(Long loanRequestId) {
-        this.loanRequestId = loanRequestId;
+    // This is the method your service needed
+    public void setRiskScore(double riskScore) {
+        this.riskScore = riskScore;
     }
 
-    public void setDtiRatio(Double dtiRatio) {
-        this.dtiRatio = dtiRatio;
+    public String getRiskLevel() {
+        return riskLevel;
     }
 
-    public void setCreditCheckStatus(String creditCheckStatus) {
-        this.creditCheckStatus = creditCheckStatus;
+    public void setRiskLevel(String riskLevel) {
+        this.riskLevel = riskLevel;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
+    public String getComments() {
+        return comments;
     }
-  
 
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    @Override
+    public String toString() {
+        return "RiskAssessment{" +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
+                ", riskScore=" + riskScore +
+                ", riskLevel='" + riskLevel + '\'' +
+                ", comments='" + comments + '\'' +
+                '}';
+    }
 }
