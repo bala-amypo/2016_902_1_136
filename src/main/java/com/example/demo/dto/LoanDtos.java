@@ -1,35 +1,13 @@
 package com.example.demo.dto;
 
+import lombok.Data;
+
+@Data
 public class LoanDtos {
-
-    private double amount;
-    private int tenure;
+    private Long id;
+    private Double requestedAmount;
+    private Integer tenureMonths;
     private String status;
-
-    public LoanDtos() {
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public int getTenure() {
-        return tenure;
-    }
-
-    public void setTenure(int tenure) {
-        this.tenure = tenure;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    private String fullName;
+    private String email;
 }
