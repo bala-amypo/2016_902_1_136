@@ -32,52 +32,53 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-public class RiskAssessment {
+public class RiskAssessmentLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    private LoanRequest loanRequest;
-
+    private Long loanId;
+    private double riskScore;
     private String riskLevel;
-    private Double dtiRatio;
+    private LocalDateTime createdAt;
 
-    // getters & setters
     public Long getId() {
         return id;
     }
- 
-    public void setId(Long id) {
-        this.id = id;
+
+    public Long getLoanId() {
+        return loanId;
     }
 
-    public LoanRequest getLoanRequest() {
-        return loanRequest;
+    public void setLoanId(Long loanId) {
+        this.loanId = loanId;
     }
- 
-    public void setLoanRequest(LoanRequest loanRequest) {
-        this.loanRequest = loanRequest;
+
+    public double getRiskScore() {
+        return riskScore;
+    }
+
+    public void setRiskScore(double riskScore) {
+        this.riskScore = riskScore;
     }
 
     public String getRiskLevel() {
         return riskLevel;
     }
- 
+
     public void setRiskLevel(String riskLevel) {
         this.riskLevel = riskLevel;
     }
 
-    public Double getEmiRatio() {
-        return dtiRatio;
-     }
- 
-    public void setEmiRatio(Double emiRatio) {
-        this.emiRatio = dtiRatio;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
-
-
