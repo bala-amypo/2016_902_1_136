@@ -9,10 +9,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
 }
-✔ Used in:
 
-User registration
-
-Login
-
-Duplicate email check
