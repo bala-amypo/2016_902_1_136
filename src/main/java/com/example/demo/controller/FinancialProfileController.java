@@ -2,26 +2,31 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.FinancialProfile;
 import com.example.demo.service.FinancialProfileService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/financial-profiles")
+@RequestMapping("/financial-profile")
 public class FinancialProfileController {
-    
-    @Autowired
-    private FinancialProfileService financialProfileService;
-    
-    @PostMapping
-    public ResponseEntity<FinancialProfile> createOrUpdate(@RequestBody FinancialProfile financialProfile) {
-        FinancialProfile result = financialProfileService.createOrUpdate(financialProfile);
-        return ResponseEntity.ok(result);
+
+    private final FinancialProfileService service;
+
+    public FinancialProfileController(FinancialProfileService service) {
+        this.service = service;
     }
-    
+
+    @PostMapping
+    public ResponseEntity<FinancialProfile> createOrUpdate(
+            @RequestBody FinancialProfile profile) {
+
+        return ResponseEntity.ok(service.createOrUpdate(profile));
+    }
+
     @GetMapping("/user/{userId}")
-    public ResponseEntity<FinancialProfile> getByUserId(@PathVariable Long userId) {
-        FinancialProfile profile = financialProfileService.getByUserId(userId);
-        return ResponseEntity.ok(profile);
+    public ResponseEntity<FinancialProfile> getByUserId(
+            @PathVariable Long userId) {
+
+        return ResponseEntity.ok(service.getByUserId(userId));
     }
 }

@@ -1,44 +1,36 @@
-// package com.example.demo.controller;
-
-// import com.example.demo.entity.RiskAssessmentLog;
-// import com.example.demo.repository.RiskAssessmentLogRepository;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.web.bind.annotation.*;
-
-// import java.util.List;
-
-// @RestController
-// @RequestMapping("/risk")
-// public class RiskLogController {
-
-//     @Autowired
-//     private RiskAssessmentLogRepository logRepository;
-
-//     @GetMapping
-//     public List<RiskAssessmentLog> getAll() {
-//         return logRepository.findAll();
-//     }
-// }
-
-
 package com.example.demo.controller;
 
-import com.example.demo.entity.RiskAssessmentLog;
-import com.example.demo.repository.RiskAssessmentLogRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.entity.RiskAssessment;
+import com.example.demo.service.RiskAssessmentService;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/risk-logs")
-public class RiskLogController {
+@RequestMapping("/risk")
+public class RiskAssessmentController {
 
-    @Autowired
-    private RiskAssessmentLogRepository repository;
+    private final RiskAssessmentService service;
 
-    @GetMapping
-    public List<RiskAssessmentLog> getAllLogs() {
-        return repository.findAll();
+    public RiskAssessmentController(RiskAssessmentService service) {
+        this.service = service;
+    }
+
+    @PostMapping("/{loanRequestId}")
+    public ResponseEntity<RiskAssessment> assessRisk(
+            @PathVariable Long loanRequestId) {
+
+        return ResponseEntity.ok(
+                service.assessRisk(loanRequestId)
+        );
+    }
+
+    @GetMapping("/{loanRequestId}")
+    public ResponseEntity<RiskAssessment> getRisk(
+            @PathVariable Long loanRequestId) {
+
+        return ResponseEntity.ok(
+                service.getByLoanRequestId(loanRequestId)
+        );
     }
 }

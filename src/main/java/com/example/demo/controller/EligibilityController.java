@@ -2,26 +2,35 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.EligibilityResult;
 import com.example.demo.service.EligibilityService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/eligibility")
+@RequestMapping("/eligibility")
 public class EligibilityController {
-    
-    @Autowired
-    private EligibilityService eligibilityService;
-    
-    @PostMapping("/evaluate/{loanRequestId}")
-    public ResponseEntity<EligibilityResult> evaluate(@PathVariable Long loanRequestId) {
-        EligibilityResult result = eligibilityService.evaluateEligibility(loanRequestId);
-        return ResponseEntity.ok(result);
+
+    private final EligibilityService service;
+
+    public EligibilityController(EligibilityService service) {
+        this.service = service;
     }
-    
-    @GetMapping("/loan-request/{loanRequestId}")
-    public ResponseEntity<EligibilityResult> getByLoanRequest(@PathVariable Long loanRequestId) {
-        EligibilityResult result = eligibilityService.getByLoanRequestId(loanRequestId);
-        return ResponseEntity.ok(result);
+
+    @PostMapping("/{loanRequestId}")
+    public ResponseEntity<EligibilityResult> evaluate(
+            @PathVariable Long loanRequestId) {
+
+        return ResponseEntity.ok(
+                service.evaluateEligibility(loanRequestId)
+        );
+    }
+
+    @GetMapping("/{loanRequestId}")
+    public ResponseEntity<EligibilityResult> getResult(
+            @PathVariable Long loanRequestId) {
+
+        return ResponseEntity.ok(
+                service.getByLoanRequestId(loanRequestId)
+        );
     }
 }
