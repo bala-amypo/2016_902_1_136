@@ -28,5 +28,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RiskAssessmentLogRepository
         extends JpaRepository<RiskAssessmentLog, Long> {
-    Optional<RiskAssessment> findByLoanRequestId(Long loanRequestId);
 }
