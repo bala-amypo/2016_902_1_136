@@ -1,50 +1,59 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.FinancialProfile;
-import com.example.demo.entity.User;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.FinancialProfileRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.FinancialProfileService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
-public class FinancialProfileServiceImpl implements FinancialProfileService {
-    
-    private final FinancialProfileRepository financialProfileRepository;
+public class FinancialProfileServiceImpl
+        implements FinancialProfileService {
+
+    private final FinancialProfileRepository repository;
     private final UserRepository userRepository;
-    
-    @Autowired
-    public FinancialProfileServiceImpl(FinancialProfileRepository financialProfileRepository, 
-                                       UserRepository userRepository) {
-        this.financialProfileRepository = financialProfileRepository;
+
+    public FinancialProfileServiceImpl(
+            FinancialProfileRepository repository,
+            UserRepository userRepository) {
+
+        this.repository = repository;
         this.userRepository = userRepository;
     }
-    
+
     @Override
-    @Transactional
-    public FinancialProfile createOrUpdate(FinancialProfile financialProfile) {
-        User user = userRepository.findById(financialProfile.getUser().getId())
-            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        
-        if (financialProfile.getCreditScore() < 300 || financialProfile.getCreditScore() > 900) {
-            throw new BadRequestException("Credit score must be between 300 and 900");
+    public FinancialProfile createOrUpdate(FinancialProfile profile) {
+
+        if (profile.getCreditScore() < 300 ||
+            profile.getCreditScore() > 900) {
+            throw new BadRequestException("Invalid credit score");
         }
-        
-        // Check if profile exists for user
-        financialProfileRepository.findByUserId(user.getId())
-            .ifPresent(existing -> financialProfile.setId(existing.getId()));
-        
-        financialProfile.setUser(user);
-        return financialProfileRepository.save(financialProfile);
+
+        Long userId = profile.getUser().getId();
+
+        userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found"));
+
+        Optional<FinancialProfile> existing =
+                repository.findByUserId(userId);
+
+        if (existing.isPresent()) {
+            profile.setId(existing.get().getId());
+        }
+
+        return repository.save(profile);
     }
-    
+
     @Override
     public FinancialProfile getByUserId(Long userId) {
-        return financialProfileRepository.findByUserId(userId)
-            .orElseThrow(() -> new ResourceNotFoundException("Financial profile not found for user id: " + userId));
+        return repository.findByUserId(userId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Profile not found"));
     }
 }

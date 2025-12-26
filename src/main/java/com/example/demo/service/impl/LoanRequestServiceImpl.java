@@ -1,34 +1,54 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.dto.LoanDtos;
 import com.example.demo.entity.LoanRequest;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.LoanRequestRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.LoanRequestService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
-@Service
-public class LoanRequestServiceImpl implements LoanRequestService {
+import java.util.List;
 
-    @Autowired
-    private LoanRequestRepository repository;
+@Service
+public class LoanRequestServiceImpl
+        implements LoanRequestService {
+
+    private final LoanRequestRepository repository;
+    private final UserRepository userRepository;
+
+    public LoanRequestServiceImpl(
+            LoanRequestRepository repository,
+            UserRepository userRepository) {
+
+        this.repository = repository;
+        this.userRepository = userRepository;
+    }
 
     @Override
-    public LoanRequest createLoan(LoanDtos dto) {
+    public LoanRequest submitRequest(LoanRequest request) {
 
-        LoanRequest loan = new LoanRequest();
-        loan.setIncome(dto.getIncome());
-        loan.setLoanAmount(dto.getLoanAmount());
-        loan.setTenure(dto.getTenure());
-        loan.setPurpose(dto.getPurpose());
-        loan.setStatus("PENDING");
+        if (request.getRequestedAmount() <= 0) {
+            throw new BadRequestException("Invalid loan amount");
+        }
 
-        return repository.save(loan);
+        userRepository.findById(request.getUser().getId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found"));
+
+        return repository.save(request);
     }
 
     @Override
     public LoanRequest getById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Loan not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Loan not found"));
+    }
+
+    @Override
+    public List<LoanRequest> getRequestsByUser(Long userId) {
+        return repository.findByUserId(userId);
     }
 }

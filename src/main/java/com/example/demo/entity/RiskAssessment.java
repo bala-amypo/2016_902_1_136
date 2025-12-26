@@ -35,7 +35,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class RiskAssessmentLog {
+public class RiskAssessment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
