@@ -14,20 +14,26 @@ public class RiskAssessment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String userId;          // ID of the user this risk assessment belongs to
+    private Long loanRequestId;     // Loan request ID
+    private String userId;          // User ID
+    private double dtiRatio;        // Debt-to-Income ratio
     private double riskScore;       // Risk score
-    private String riskLevel;       // e.g., LOW, MEDIUM, HIGH
-    private String comments;        // Optional comments or notes
+    private String riskLevel;       // LOW, MEDIUM, HIGH
+    private String creditCheckStatus; // e.g., PASS / FAIL
+    private String comments;        // Optional notes
 
     // Default constructor
-    public RiskAssessment() {
-    }
+    public RiskAssessment() {}
 
     // Parameterized constructor
-    public RiskAssessment(String userId, double riskScore, String riskLevel, String comments) {
+    public RiskAssessment(Long loanRequestId, String userId, double dtiRatio,
+                          double riskScore, String riskLevel, String creditCheckStatus, String comments) {
+        this.loanRequestId = loanRequestId;
         this.userId = userId;
+        this.dtiRatio = dtiRatio;
         this.riskScore = riskScore;
         this.riskLevel = riskLevel;
+        this.creditCheckStatus = creditCheckStatus;
         this.comments = comments;
     }
 
@@ -40,6 +46,14 @@ public class RiskAssessment {
         this.id = id;
     }
 
+    public Long getLoanRequestId() {
+        return loanRequestId;
+    }
+
+    public void setLoanRequestId(Long loanRequestId) {
+        this.loanRequestId = loanRequestId;
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -48,11 +62,18 @@ public class RiskAssessment {
         this.userId = userId;
     }
 
+    public double getDtiRatio() {
+        return dtiRatio;
+    }
+
+    public void setDtiRatio(double dtiRatio) {
+        this.dtiRatio = dtiRatio;
+    }
+
     public double getRiskScore() {
         return riskScore;
     }
 
-    // This is the method your service needed
     public void setRiskScore(double riskScore) {
         this.riskScore = riskScore;
     }
@@ -63,6 +84,14 @@ public class RiskAssessment {
 
     public void setRiskLevel(String riskLevel) {
         this.riskLevel = riskLevel;
+    }
+
+    public String getCreditCheckStatus() {
+        return creditCheckStatus;
+    }
+
+    public void setCreditCheckStatus(String creditCheckStatus) {
+        this.creditCheckStatus = creditCheckStatus;
     }
 
     public String getComments() {
@@ -77,9 +106,12 @@ public class RiskAssessment {
     public String toString() {
         return "RiskAssessment{" +
                 "id=" + id +
+                ", loanRequestId=" + loanRequestId +
                 ", userId='" + userId + '\'' +
+                ", dtiRatio=" + dtiRatio +
                 ", riskScore=" + riskScore +
                 ", riskLevel='" + riskLevel + '\'' +
+                ", creditCheckStatus='" + creditCheckStatus + '\'' +
                 ", comments='" + comments + '\'' +
                 '}';
     }
