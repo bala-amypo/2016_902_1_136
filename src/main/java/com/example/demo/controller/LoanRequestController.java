@@ -1,35 +1,29 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.LoanDtos;
 import com.example.demo.entity.LoanRequest;
 import com.example.demo.service.LoanRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/loan-requests")
+@RequestMapping("/api/loans")
 public class LoanRequestController {
-    
+
     @Autowired
-    private LoanRequestService loanRequestService;
-    
+    private LoanRequestService loanService;
+
     @PostMapping
-    public ResponseEntity<LoanRequest> submitRequest(@RequestBody LoanRequest loanRequest) {
-        LoanRequest result = loanRequestService.submitRequest(loanRequest);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<LoanRequest> applyLoan(@RequestBody LoanDtos dto) {
+
+        LoanRequest loan = loanService.createLoan(dto);
+        return ResponseEntity.ok(loan);
     }
-    
+
     @GetMapping("/{id}")
-    public ResponseEntity<LoanRequest> getById(@PathVariable Long id) {
-        LoanRequest loanRequest = loanRequestService.getById(id);
-        return ResponseEntity.ok(loanRequest);
-    }
-    
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<LoanRequest>> getByUser(@PathVariable Long userId) {
-        List<LoanRequest> requests = loanRequestService.getRequestsByUser(userId);
-        return ResponseEntity.ok(requests);
+    public ResponseEntity<LoanRequest> getLoan(@PathVariable Long id) {
+
+        return ResponseEntity.ok(loanService.getById(id));
     }
 }
