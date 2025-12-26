@@ -4,7 +4,9 @@ import com.example.demo.entity.User;
 
 public interface UserService {
 
-    User save(User user);
+    User register(User user);
+
+    User getById(Long id);
 
     User findByEmail(String email);
 }
