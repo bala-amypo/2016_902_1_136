@@ -31,7 +31,6 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 public class LoanRequest {
@@ -40,65 +39,55 @@ public class LoanRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private User user;
-
-    private Double requestedAmount;
-    private Integer tenureMonths;
+    private double income;
+    private double loanAmount;
+    private int tenure;
+    private String purpose;
     private String status;
-    private LocalDateTime submittedAt;
 
-    public enum Status {
-        PENDING, APPROVED, REJECTED
-    }
-
-    // getters & setters
+    // Getters
     public Long getId() {
         return id;
     }
- 
-    public void setId(Long id) {
-        this.id = id;
+
+    public double getIncome() {
+        return income;
     }
 
-    public User getUser() {
-        return user;
-    }
- 
-    public void setUser(User user) {
-        this.user = user;
+    public double getLoanAmount() {
+        return loanAmount;
     }
 
-    public Double getRequestedAmount() {
-        return requestedAmount;
-    }
- 
-    public void setRequestedAmount(Double requestedAmount) {
-        this.requestedAmount = requestedAmount;
+    public int getTenure() {
+        return tenure;
     }
 
-    public Integer getTenureMonths() {
-        return tenureMonths;
-    }
- 
-    public void setTenureMonths(Integer tenureMonths) {
-        this.tenureMonths = tenureMonths;
+    public String getPurpose() {
+        return purpose;
     }
 
     public String getStatus() {
         return status;
     }
- 
+
+    // Setters
+    public void setIncome(double income) {
+        this.income = income;
+    }
+
+    public void setLoanAmount(double loanAmount) {
+        this.loanAmount = loanAmount;
+    }
+
+    public void setTenure(int tenure) {
+        this.tenure = tenure;
+    }
+
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
+    }
+
     public void setStatus(String status) {
         this.status = status;
     }
-
-    public LocalDateTime getSubmittedAt() {
-        return submittedAt;
-    }
- 
-    public void setSubmittedAt(LocalDateTime submittedAt) {
-        this.submittedAt = submittedAt;
-    }
- }
-
+}
