@@ -84,8 +84,6 @@ public class RiskAssessment {
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
-    public void setRiskScore(double riskScore) {
-    this.riskScore = riskScore;
-}
+  
 
 }
