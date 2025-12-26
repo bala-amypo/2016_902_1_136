@@ -41,44 +41,47 @@ public class RiskAssessmentLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long loanId;
-    private double riskScore;
-    private String riskLevel;
-    private LocalDateTime createdAt;
+    private Long loanRequestId;
+    private Double dtiRatio;
+    private String creditCheckStatus;
 
+    private LocalDateTime timestamp;
+
+    // Getters
     public Long getId() {
         return id;
     }
 
-    public Long getLoanId() {
-        return loanId;
+    public Long getLoanRequestId() {
+        return loanRequestId;
     }
 
-    public void setLoanId(Long loanId) {
-        this.loanId = loanId;
+    public Double getDtiRatio() {
+        return dtiRatio;
     }
 
-    public double getRiskScore() {
-        return riskScore;
+    public String getCreditCheckStatus() {
+        return creditCheckStatus;
     }
 
-    public void setRiskScore(double riskScore) {
-        this.riskScore = riskScore;
+    public LocalDateTime getTimestamp() {
+        return timestamp;
     }
 
-    public String getRiskLevel() {
-        return riskLevel;
+    // Setters
+    public void setLoanRequestId(Long loanRequestId) {
+        this.loanRequestId = loanRequestId;
     }
 
-    public void setRiskLevel(String riskLevel) {
-        this.riskLevel = riskLevel;
+    public void setDtiRatio(Double dtiRatio) {
+        this.dtiRatio = dtiRatio;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public void setCreditCheckStatus(String creditCheckStatus) {
+        this.creditCheckStatus = creditCheckStatus;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 }

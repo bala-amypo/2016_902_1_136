@@ -31,6 +31,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class LoanRequest {
@@ -39,27 +40,32 @@ public class LoanRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private double income;
-    private double loanAmount;
-    private int tenure;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    private Double requestedAmount;
+    private Integer tenureMonths;
     private String purpose;
-    private String status;
+
+    private String status; // PENDING / APPROVED / REJECTED
+    private LocalDateTime appliedAt;
 
     // Getters
     public Long getId() {
         return id;
     }
 
-    public double getIncome() {
-        return income;
+    public User getUser() {
+        return user;
     }
 
-    public double getLoanAmount() {
-        return loanAmount;
+    public Double getRequestedAmount() {
+        return requestedAmount;
     }
 
-    public int getTenure() {
-        return tenure;
+    public Integer getTenureMonths() {
+        return tenureMonths;
     }
 
     public String getPurpose() {
@@ -70,17 +76,21 @@ public class LoanRequest {
         return status;
     }
 
+    public LocalDateTime getAppliedAt() {
+        return appliedAt;
+    }
+
     // Setters
-    public void setIncome(double income) {
-        this.income = income;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public void setLoanAmount(double loanAmount) {
-        this.loanAmount = loanAmount;
+    public void setRequestedAmount(Double requestedAmount) {
+        this.requestedAmount = requestedAmount;
     }
 
-    public void setTenure(int tenure) {
-        this.tenure = tenure;
+    public void setTenureMonths(Integer tenureMonths) {
+        this.tenureMonths = tenureMonths;
     }
 
     public void setPurpose(String purpose) {
@@ -89,5 +99,9 @@ public class LoanRequest {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setAppliedAt(LocalDateTime appliedAt) {
+        this.appliedAt = appliedAt;
     }
 }

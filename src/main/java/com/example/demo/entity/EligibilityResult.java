@@ -46,6 +46,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class EligibilityResult {
@@ -55,42 +56,74 @@ public class EligibilityResult {
     private Long id;
 
     @OneToOne
+    @JoinColumn(name = "loan_request_id", nullable = false)
     private LoanRequest loanRequest;
 
-    private Boolean eligible;
+    private Boolean isEligible;
     private Double maxEligibleAmount;
+    private Double estimatedEmi;
 
-    // getters & setters
-    public Long getId() {
-        return id;
-    }
- 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private String riskLevel; // LOW / MEDIUM / HIGH
+    private String rejectionReason;
 
-    public LoanRequest getLoanRequest() {
-        return loanRequest;
-    }
- 
-    public void setLoanRequest(LoanRequest loanRequest) {
-        this.loanRequest = loanRequest;
-    }
+    private LocalDateTime calculatedAt;
 
-    public Boolean getEligible() {
-        return eligible;
-    }
- 
-    public void setEligible(Boolean eligible) {
-        this.eligible = eligible;
+    // Getters
+    public Boolean getIsEligible() {
+        return isEligible;
     }
 
     public Double getMaxEligibleAmount() {
         return maxEligibleAmount;
     }
- 
+
+    public Double getEstimatedEmi() {
+        return estimatedEmi;
+    }
+
+    public String getRiskLevel() {
+        return riskLevel;
+    }
+
+    public String getRejectionReason() {
+        return rejectionReason;
+    }
+
+    public LocalDateTime getCalculatedAt() {
+        return calculatedAt;
+    }
+
+    public LoanRequest getLoanRequest() {
+        return loanRequest;
+    }
+
+    // Setters
+    public void setLoanRequest(LoanRequest loanRequest) {
+        this.loanRequest = loanRequest;
+    }
+
+    public void setIsEligible(Boolean eligible) {
+        isEligible = eligible;
+    }
+
     public void setMaxEligibleAmount(Double maxEligibleAmount) {
         this.maxEligibleAmount = maxEligibleAmount;
+    }
+
+    public void setEstimatedEmi(Double estimatedEmi) {
+        this.estimatedEmi = estimatedEmi;
+    }
+
+    public void setRiskLevel(String riskLevel) {
+        this.riskLevel = riskLevel;
+    }
+
+    public void setRejectionReason(String rejectionReason) {
+        this.rejectionReason = rejectionReason;
+    }
+
+    public void setCalculatedAt(LocalDateTime calculatedAt) {
+        this.calculatedAt = calculatedAt;
     }
 }
 
