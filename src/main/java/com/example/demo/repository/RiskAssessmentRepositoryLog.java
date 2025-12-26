@@ -30,6 +30,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface RiskAssessmentRepository extends JpaRepository<RiskAssessment, Long> {
+public interface RiskAssessmentLogRepository extends JpaRepository<RiskAssessment, Long> {
     Optional<RiskAssessment> findByLoanRequestId(Long loanRequestId);
 }
