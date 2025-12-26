@@ -1,119 +1,64 @@
-// package com.example.demo.entity;
-
-// import jakarta.persistence.*;
-
-// @Entity
-// public class FinancialProfile {
-
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     private Long id;
-
-//     private double income;
-//     private double expenses;
-//     private int creditScore;
-
-//     public FinancialProfile() {}
-
-//     public Long getId() { return id; }
-//     public void setId(Long id) { this.id = id; }
-
-//     public double getIncome() { return income; }
-//     public void setIncome(double income) { this.income = income; }
-
-//     public double getExpenses() { return expenses; }
-//     public void setExpenses(double expenses) { this.expenses = expenses; }
-
-//     public int getCreditScore() { return creditScore; }
-//     public void setCreditScore(int creditScore) { this.creditScore = creditScore; }
-// }
-
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(
-    uniqueConstraints = @UniqueConstraint(columnNames = "user_id")
-)
-public class FinancialProfile {
+public class User {
+
+    public enum Role {
+        CUSTOMER, ADMIN
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(unique = true)
+    private String email;
 
-    private Double monthlyIncome;
-    private Double monthlyExpenses;
-    private Double existingLoanEmi;
-    private Integer creditScore;
-    private Double savingsBalance;
+    private String password;
+    private String fullName;
+    private String role;
 
-    private LocalDateTime lastUpdatedAt;
+    // ===== GETTERS & SETTERS =====
 
-    // Getters
     public Long getId() {
         return id;
     }
 
-    public User getUser() {
-        return user;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Double getMonthlyIncome() {
-        return monthlyIncome;
+    public String getEmail() {
+        return email;
     }
 
-    public Double getMonthlyExpenses() {
-        return monthlyExpenses;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public Double getExistingLoanEmi() {
-        return existingLoanEmi;
+    public String getPassword() {
+        return password;
     }
-
-    public Integer getCreditScore() {
-        return creditScore;
+ 
+    public void setPassword(String password) {
+        this.password = password;
     }
-
-    public Double getSavingsBalance() {
-        return savingsBalance;
+ 
+    public String getFullName() {
+        return fullName;
     }
-
-    public LocalDateTime getLastUpdatedAt() {
-        return lastUpdatedAt;
+ 
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
-
-    // Setters
-    public void setUser(User user) {
-        this.user = user;
+ 
+    public String getRole() {
+        return role;
     }
-
-    public void setMonthlyIncome(Double monthlyIncome) {
-        this.monthlyIncome = monthlyIncome;
-    }
-
-    public void setMonthlyExpenses(Double monthlyExpenses) {
-        this.monthlyExpenses = monthlyExpenses;
-    }
-
-    public void setExistingLoanEmi(Double existingLoanEmi) {
-        this.existingLoanEmi = existingLoanEmi;
-    }
-
-    public void setCreditScore(Integer creditScore) {
-        this.creditScore = creditScore;
-    }
-
-    public void setSavingsBalance(Double savingsBalance) {
-        this.savingsBalance = savingsBalance;
-    }
-
-    public void setLastUpdatedAt(LocalDateTime lastUpdatedAt) {
-        this.lastUpdatedAt = lastUpdatedAt;
+ 
+    public void setRole(String role) {
+        this.role = role;
     }
 }
