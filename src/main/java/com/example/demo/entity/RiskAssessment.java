@@ -44,7 +44,7 @@ public class RiskAssessment {
     private LoanRequest loanRequest;
 
     private String riskLevel;
-    private Double emiRatio;
+    private Double dtiRatio;
 
     // getters & setters
     public Long getId() {
@@ -72,11 +72,11 @@ public class RiskAssessment {
     }
 
     public Double getEmiRatio() {
-        return emiRatio;
+        return dtiRatio;
      }
  
     public void setEmiRatio(Double emiRatio) {
-        this.emiRatio = emiRatio;
+        this.emiRatio = dtiRatio;
     }
 }
 
