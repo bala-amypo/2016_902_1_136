@@ -24,7 +24,7 @@
 //         this.username = username;
 //         this.password = password;
 //         this.role = role;
-//     }
+//      }
 
 //     public Long getId() { return id; }
 //     public void setId(Long id) { this.id = id; }
@@ -37,66 +37,132 @@
 
 //     public String getRole() { return role; }
 //     public void setRole(String role) { this.role = role; }
-// }
+//  }
 
+// package com.example.demo.entity;
+
+//  import jakarta.persistence.*;
+
+// @Entity
+//  public class User {
+
+//     @Id
+//     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//     private Long id;
+
+//     private String email;
+//     private String password;
+//     private String fullName;
+//     private String role;
+
+//     public enum Role {
+//         CUSTOMER, ADMIN
+//      }
+
+//     // getters & setters
+//     public Long getId() {
+//         return id;
+//     }
+
+//     public void setId(Long id) {
+//         this.id = id;
+//      }
+
+//     public String getEmail() {
+//         return email;
+//     }
+
+//     public void setEmail(String email) {
+//         this.email = email;
+//      }
+
+//     public String getPassword() {
+//         return password;
+//     }
+ 
+//     public void setPassword(String password) {
+//         this.password = password;
+//      }
+
+//     public String getFullName() {
+//         return fullName;
+//     }
+ 
+//     public void setFullName(String fullName) {
+//         this.fullName = fullName;
+//      }
+
+//     public String getRole() {
+//         return role;
+//     }
+ 
+//     public void setRole(String role) {
+//         this.role = role;
+//     }
+// }
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Table(name = "users", uniqueConstraints = {
+    @UniqueConstraint(columnNames = "email")
+})
+@Data
 public class User {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String email;
-    private String password;
+    
+    @NotBlank(message = "Full name is required")
+    @Column(nullable = false)
     private String fullName;
-    private String role;
-
+    
+    @Email(message = "Email should be valid")
+    @NotBlank(message = "Email is required")
+    @Column(nullable = false, unique = true)
+    private String email;
+    
+    @NotBlank(message = "Password is required")
+    @Column(nullable = false)
+    private String password;
+    
+    @Column(nullable = false)
+    private String role = Role.CUSTOMER.name();
+    
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+    
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+    
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private FinancialProfile financialProfile;
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<LoanRequest> loanRequests = new ArrayList<>();
+    
     public enum Role {
         CUSTOMER, ADMIN
     }
-
-    // getters & setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
- 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
- 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getRole() {
-        return role;
-    }
- 
-    public void setRole(String role) {
-        this.role = role;
+    
+    @PrePersist
+    @PreUpdate
+    public void validate() {
+        if (this.role == null) {
+            this.role = Role.CUSTOMER.name();
+        }
     }
 }
