@@ -34,7 +34,7 @@ public class LoanRequest {
     private LocalDateTime submittedAt;
     
     @PrePersist
-    protected void onCreate() {
+    public void onCreate() {
         submittedAt = LocalDateTime.now();
         if (status == null) {
             status = Status.PENDING.name();

@@ -34,7 +34,7 @@ public class FinancialProfile {
     
     @PrePersist
     @PreUpdate
-    protected void onUpdate() {
+    public void onUpdate() {
         lastUpdatedAt = LocalDateTime.now();
     }
     
