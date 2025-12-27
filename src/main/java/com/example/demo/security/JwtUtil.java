@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -13,27 +14,22 @@ import java.util.Map;
 @Component
 public class JwtUtil {
     
-    private final SecretKey key;
+    private final String secret;
     private final long validityInMs;
+    private final SecretKey key;
     
-    public JwtUtil() {
-        this("ChangeThisSecretForProductionButKeepItLongEnough", 3600000L);
-    }
-    
-    public JwtUtil(String secret, long validityInMs) {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+    public JwtUtil(@Value("${jwt.secret}") String secret, @Value("${jwt.expiration}") long validityInMs) {
+        this.secret = secret;
         this.validityInMs = validityInMs;
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
     
     public String generateToken(Map<String, Object> claims, String subject) {
-        Date now = new Date();
-        Date expiry = new Date(now.getTime() + validityInMs);
-        
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
-                .setIssuedAt(now)
-                .setExpiration(expiry)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + validityInMs))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
