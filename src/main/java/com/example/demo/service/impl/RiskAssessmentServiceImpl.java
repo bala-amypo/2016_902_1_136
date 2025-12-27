@@ -1,67 +1,79 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.*;
+import com.example.demo.entity.FinancialProfile;
+import com.example.demo.entity.LoanRequest;
+import com.example.demo.entity.RiskAssessment;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.*;
+import com.example.demo.repository.FinancialProfileRepository;
+import com.example.demo.repository.LoanRequestRepository;
+import com.example.demo.repository.RiskAssessmentRepository;
 import com.example.demo.service.RiskAssessmentService;
-
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class RiskAssessmentServiceImpl
-        implements RiskAssessmentService {
-
-    private final LoanRequestRepository loanRepo;
-    private final FinancialProfileRepository profileRepo;
-    private final RiskAssessmentRepository riskRepo;
-
-    public RiskAssessmentServiceImpl(
-            LoanRequestRepository loanRepo,
-            FinancialProfileRepository profileRepo,
-            RiskAssessmentRepository riskRepo) {
-
-        this.loanRepo = loanRepo;
-        this.profileRepo = profileRepo;
-        this.riskRepo = riskRepo;
+public class RiskAssessmentServiceImpl implements RiskAssessmentService {
+    
+    private final LoanRequestRepository loanRequestRepository;
+    private final FinancialProfileRepository financialProfileRepository;
+    private final RiskAssessmentRepository riskAssessmentRepository;
+    
+    public RiskAssessmentServiceImpl(LoanRequestRepository loanRequestRepository,
+                                   FinancialProfileRepository financialProfileRepository,
+                                   RiskAssessmentRepository riskAssessmentRepository) {
+        this.loanRequestRepository = loanRequestRepository;
+        this.financialProfileRepository = financialProfileRepository;
+        this.riskAssessmentRepository = riskAssessmentRepository;
     }
-
+    
     @Override
     public RiskAssessment assessRisk(Long loanRequestId) {
-
-        if (riskRepo.findByLoanRequestId(loanRequestId).isPresent()) {
+        // Check if already assessed
+        List<RiskAssessment> existing = riskAssessmentRepository.findByLoanRequestId(loanRequestId);
+        if (!existing.isEmpty()) {
             throw new BadRequestException("Risk already assessed");
         }
-
-        LoanRequest loan = loanRepo.findById(loanRequestId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Loan not found"));
-
-        FinancialProfile profile =
-                profileRepo.findByUserId(loan.getUser().getId())
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException("Profile not found"));
-
-        RiskAssessment risk = new RiskAssessment();
-        risk.setLoanRequestId(loanRequestId);
-
-        double income = profile.getMonthlyIncome();
-        double emi = profile.getExistingLoanEmi();
-
-        double dti = income == 0 ? 0 : (emi / income) * 100;
-
-        risk.setDtiRatio(dti);
-        risk.setRiskScore(Math.min(100, dti));
-        risk.setCreditCheckStatus(
-                profile.getCreditScore() >= 650 ? "PASS" : "FAIL");
-
-        return riskRepo.save(risk);
+        
+        LoanRequest loanRequest = loanRequestRepository.findById(loanRequestId)
+                .orElseThrow(() -> new ResourceNotFoundException("Loan request not found"));
+        
+        FinancialProfile profile = financialProfileRepository.findByUserId(loanRequest.getUser().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Financial profile not found"));
+        
+        // Calculate DTI ratio
+        double totalObligations = profile.getMonthlyExpenses() + (profile.getExistingLoanEmi() != null ? profile.getExistingLoanEmi() : 0.0);
+        double dtiRatio = profile.getMonthlyIncome() > 0 ? totalObligations / profile.getMonthlyIncome() : 0.0;
+        
+        // Determine credit check status
+        String creditCheckStatus;
+        if (profile.getCreditScore() >= 750) {
+            creditCheckStatus = "APPROVED";
+        } else if (profile.getCreditScore() >= 600) {
+            creditCheckStatus = "PENDING_REVIEW";
+        } else {
+            creditCheckStatus = "REJECTED";
+        }
+        
+        // Calculate risk score (0-100)
+        double riskScore = 0.0;
+        riskScore += (900 - profile.getCreditScore()) / 6.0; // Credit score component
+        riskScore += dtiRatio * 50; // DTI component
+        riskScore = Math.min(100.0, Math.max(0.0, riskScore));
+        
+        RiskAssessment assessment = new RiskAssessment(loanRequestId, dtiRatio, creditCheckStatus);
+        assessment.setRiskScore(riskScore);
+        
+        return riskAssessmentRepository.save(assessment);
     }
-
+    
     @Override
     public RiskAssessment getByLoanRequestId(Long loanRequestId) {
-        return riskRepo.findByLoanRequestId(loanRequestId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Risk not found"));
+        List<RiskAssessment> assessments = riskAssessmentRepository.findByLoanRequestId(loanRequestId);
+        if (assessments.isEmpty()) {
+            throw new ResourceNotFoundException("Risk assessment not found");
+        }
+        return assessments.get(0);
     }
 }

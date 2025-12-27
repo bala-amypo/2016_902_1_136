@@ -5,42 +5,41 @@ import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
-
-    private final UserRepository repository;
-    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-    public UserServiceImpl(UserRepository repository) {
-        this.repository = repository;
+    
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+    
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
-
+    
     @Override
     public User register(User user) {
-
-        if (repository.findByEmail(user.getEmail()).isPresent()) {
-            throw new BadRequestException("Email already exists");
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new BadRequestException("Email already in use");
         }
-
-        user.setPassword(encoder.encode(user.getPassword()));
+        
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(User.Role.CUSTOMER.name());
-
-        return repository.save(user);
+        
+        return userRepository.save(user);
     }
-
+    
     @Override
     public User getById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found"));
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
-
+    
     @Override
     public User findByEmail(String email) {
-        return repository.findByEmail(email).orElse(null);
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }
