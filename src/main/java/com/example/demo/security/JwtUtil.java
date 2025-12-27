@@ -3,43 +3,49 @@ package com.example.demo.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.Map;
 
 @Component
 public class JwtUtil {
-
-    private String secret;
-    private long expirationTime;
-
-    // Default constructor
+    
+    private final SecretKey key;
+    private final long validityInMs;
+    
     public JwtUtil() {
-        this.secret = "mySecretKey123";
-        this.expirationTime = 1000 * 60 * 60; // 1 hour
+        this("ChangeThisSecretForProductionButKeepItLongEnough", 3600000L);
     }
-
-    // Parameterized constructor (used in tests)
-    public JwtUtil(String secret, int expirationInMinutes) {
-        this.secret = secret;
-        this.expirationTime = expirationInMinutes * 60L * 1000L;
+    
+    public JwtUtil(String secret, long validityInMs) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        this.validityInMs = validityInMs;
     }
-
+    
     public String generateToken(Map<String, Object> claims, String subject) {
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + validityInMs);
+        
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .setIssuedAt(now)
+                .setExpiration(expiry)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
-
-    public String extractUsername(String token) {
-        return getAllClaims(token).getSubject();
+    
+    public Claims getAllClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
-
+    
     public boolean validateToken(String token) {
         try {
             getAllClaims(token);
@@ -48,12 +54,12 @@ public class JwtUtil {
             return false;
         }
     }
-
-    // Added method used in tests
-    public Claims getAllClaims(String token) {
-        return Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token)
-                .getBody();
+    
+    public String getEmail(String token) {
+        return getAllClaims(token).getSubject();
+    }
+    
+    public String getRole(String token) {
+        return getAllClaims(token).get("role", String.class);
     }
 }
