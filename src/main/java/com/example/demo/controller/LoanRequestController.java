@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/loan-requests")
-@Tag(name = "LoanRequest", description = "Loan request management")
+@Tag(name = "Loan Request", description = "Loan request management")
 public class LoanRequestController {
     
     private final LoanRequestService loanRequestService;
@@ -21,8 +21,8 @@ public class LoanRequestController {
     
     @PostMapping
     public ResponseEntity<LoanRequest> submitRequest(@RequestBody LoanRequest request) {
-        LoanRequest saved = loanRequestService.submitRequest(request);
-        return ResponseEntity.ok(saved);
+        LoanRequest submitted = loanRequestService.submitRequest(request);
+        return ResponseEntity.ok(submitted);
     }
     
     @GetMapping("/user/{userId}")

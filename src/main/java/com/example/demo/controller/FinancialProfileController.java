@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/financial-profiles")
-@Tag(name = "FinancialProfile", description = "Financial profile management")
+@Tag(name = "Financial Profile", description = "Financial profile management")
 public class FinancialProfileController {
     
     private final FinancialProfileService financialProfileService;

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/risk-logs")
-@Tag(name = "RiskLog", description = "Risk assessment logs")
+@Tag(name = "Risk Assessment", description = "Risk assessment and logging")
 public class RiskLogController {
     
     private final RiskAssessmentService riskAssessmentService;
