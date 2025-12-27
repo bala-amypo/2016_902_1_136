@@ -84,7 +84,6 @@
 //         return assessments.get(0);
 //     }
 //  }
-
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.FinancialProfile;
@@ -95,8 +94,6 @@ import com.example.demo.repository.FinancialProfileRepository;
 import com.example.demo.repository.LoanRequestRepository;
 import com.example.demo.repository.RiskAssessmentRepository;
 import com.example.demo.service.RiskAssessmentService;
-
-import java.util.Optional;
 
 public class RiskAssessmentServiceImpl implements RiskAssessmentService {
 
@@ -119,10 +116,7 @@ public class RiskAssessmentServiceImpl implements RiskAssessmentService {
         LoanRequest loanRequest = loanRequestRepository.findById(loanRequestId)
                 .orElseThrow(() -> new BadRequestException("Loan request not found"));
 
-        Optional<RiskAssessment> existing =
-                riskAssessmentRepository.findByLoanRequestId(loanRequestId);
-
-        if (existing.isPresent()) {
+        if (riskAssessmentRepository.findByLoanRequestId(loanRequestId).isPresent()) {
             throw new BadRequestException("Risk already assessed");
         }
 
@@ -131,16 +125,15 @@ public class RiskAssessmentServiceImpl implements RiskAssessmentService {
                 .orElseThrow(() -> new BadRequestException("Financial profile not found"));
 
         double income = profile.getMonthlyIncome();
-        double totalObligations =
+        double obligations =
                 profile.getMonthlyExpenses() + profile.getExistingLoanEmi();
 
-        double dtiRatio = income == 0 ? 0.0 : totalObligations / income;
+        double dtiRatio = income == 0 ? 0.0 : obligations / income;
 
         double riskScore = Math.max(0, Math.min(100,
                 100 - (dtiRatio * 100) + (profile.getCreditScore() - 600) / 3.0));
 
         RiskAssessment assessment = new RiskAssessment();
-        assessment.setLoanRequest(loanRequest);
         assessment.setDtiRatio(dtiRatio);
         assessment.setRiskScore(riskScore);
 

@@ -87,7 +87,6 @@
 //                 .orElseThrow(() -> new ResourceNotFoundException("Eligibility result not found"));
 //     }
 //  }
-
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.EligibilityResult;
@@ -98,8 +97,6 @@ import com.example.demo.repository.EligibilityResultRepository;
 import com.example.demo.repository.FinancialProfileRepository;
 import com.example.demo.repository.LoanRequestRepository;
 import com.example.demo.service.EligibilityService;
-
-import java.util.Optional;
 
 public class EligibilityServiceImpl implements EligibilityService {
 
@@ -122,10 +119,7 @@ public class EligibilityServiceImpl implements EligibilityService {
         LoanRequest loanRequest = loanRequestRepository.findById(loanRequestId)
                 .orElseThrow(() -> new BadRequestException("Loan request not found"));
 
-        Optional<EligibilityResult> existing =
-                eligibilityResultRepository.findByLoanRequestId(loanRequestId);
-
-        if (existing.isPresent()) {
+        if (eligibilityResultRepository.findByLoanRequestId(loanRequestId).isPresent()) {
             throw new BadRequestException("Eligibility already evaluated");
         }
 
@@ -139,8 +133,6 @@ public class EligibilityServiceImpl implements EligibilityService {
                         - profile.getExistingLoanEmi();
 
         EligibilityResult result = new EligibilityResult();
-        result.setLoanRequest(loanRequest);
-        result.setEligible(disposableIncome > 0);
         result.setMaxEligibleAmount(Math.max(0, disposableIncome * 10));
 
         return eligibilityResultRepository.save(result);
