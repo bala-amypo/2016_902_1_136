@@ -1,34 +1,34 @@
-package com.example.demo.service.impl;
+// package com.example.demo.service.impl;
 
-import com.example.demo.entity.FinancialProfile;
-import com.example.demo.entity.LoanRequest;
-import com.example.demo.entity.RiskAssessment;
-import com.example.demo.exception.BadRequestException;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.FinancialProfileRepository;
-import com.example.demo.repository.LoanRequestRepository;
-import com.example.demo.repository.RiskAssessmentRepository;
-import com.example.demo.service.RiskAssessmentService;
-import org.springframework.stereotype.Service;
+// import com.example.demo.entity.FinancialProfile;
+// import com.example.demo.entity.LoanRequest;
+// import com.example.demo.entity.RiskAssessment;
+// import com.example.demo.exception.BadRequestException;
+// import com.example.demo.exception.ResourceNotFoundException;
+// import com.example.demo.repository.FinancialProfileRepository;
+// import com.example.demo.repository.LoanRequestRepository;
+// import com.example.demo.repository.RiskAssessmentRepository;
+// import com.example.demo.service.RiskAssessmentService;
+// import org.springframework.stereotype.Service;
 
-import java.util.List;
+// import java.util.List;
 
-@Service
-public class RiskAssessmentServiceImpl implements RiskAssessmentService {
+// @Service
+//  public class RiskAssessmentServiceImpl implements RiskAssessmentService {
     
-    private final LoanRequestRepository loanRequestRepository;
-    private final FinancialProfileRepository financialProfileRepository;
-    private final RiskAssessmentRepository riskAssessmentRepository;
+//     private final LoanRequestRepository loanRequestRepository;
+//     private final FinancialProfileRepository financialProfileRepository;
+//     private final RiskAssessmentRepository riskAssessmentRepository;
     
-    public RiskAssessmentServiceImpl(LoanRequestRepository loanRequestRepository,
-                                   FinancialProfileRepository financialProfileRepository,
-                                   RiskAssessmentRepository riskAssessmentRepository) {
-        this.loanRequestRepository = loanRequestRepository;
-        this.financialProfileRepository = financialProfileRepository;
-        this.riskAssessmentRepository = riskAssessmentRepository;
-    }
+//     public RiskAssessmentServiceImpl(LoanRequestRepository loanRequestRepository,
+//                                    FinancialProfileRepository financialProfileRepository,
+//                                    RiskAssessmentRepository riskAssessmentRepository) {
+//         this.loanRequestRepository = loanRequestRepository;
+//         this.financialProfileRepository = financialProfileRepository;
+//         this.riskAssessmentRepository = riskAssessmentRepository;
+//     }
     
-    @Override
+//     @Override
 //     public RiskAssessment assessRisk(Long loanRequestId) {
 //         // Check if already assessed
 //         List<RiskAssessment> existing = riskAssessmentRepository.findByLoanRequestId(loanRequestId);
@@ -85,34 +85,71 @@ public class RiskAssessmentServiceImpl implements RiskAssessmentService {
 //     }
 //  }
 
+package com.example.demo.service.impl;
 
+import com.example.demo.entity.FinancialProfile;
+import com.example.demo.entity.LoanRequest;
+import com.example.demo.entity.RiskAssessment;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.repository.FinancialProfileRepository;
+import com.example.demo.repository.LoanRequestRepository;
+import com.example.demo.repository.RiskAssessmentRepository;
+import com.example.demo.service.RiskAssessmentService;
 
-public RiskAssessment assessRisk(Long loanRequestId) {
+import java.util.Optional;
 
-    LoanRequest loanRequest = loanRequestRepository.findById(loanRequestId)
-            .orElseThrow(() -> new BadRequestException("Loan request not found"));
+public class RiskAssessmentServiceImpl implements RiskAssessmentService {
 
-    if (riskAssessmentRepository.findByLoanRequestId(loanRequestId).isPresent()) {
-        throw new BadRequestException("Risk already assessed");
+    private final LoanRequestRepository loanRequestRepository;
+    private final FinancialProfileRepository financialProfileRepository;
+    private final RiskAssessmentRepository riskAssessmentRepository;
+
+    public RiskAssessmentServiceImpl(
+            LoanRequestRepository loanRequestRepository,
+            FinancialProfileRepository financialProfileRepository,
+            RiskAssessmentRepository riskAssessmentRepository) {
+        this.loanRequestRepository = loanRequestRepository;
+        this.financialProfileRepository = financialProfileRepository;
+        this.riskAssessmentRepository = riskAssessmentRepository;
     }
 
-    FinancialProfile profile = financialProfileRepository
-            .findByUserId(loanRequest.getUser().getId())
-            .orElseThrow(() -> new BadRequestException("Financial profile not found"));
+    @Override
+    public RiskAssessment assessRisk(Long loanRequestId) {
 
-    RiskAssessment risk = new RiskAssessment();
-    risk.setLoanRequest(loanRequest);
+        LoanRequest loanRequest = loanRequestRepository.findById(loanRequestId)
+                .orElseThrow(() -> new BadRequestException("Loan request not found"));
 
-    double income = profile.getMonthlyIncome();
-    double expenses = profile.getMonthlyExpenses() + profile.getExistingLoanEmi();
+        Optional<RiskAssessment> existing =
+                riskAssessmentRepository.findByLoanRequestId(loanRequestId);
 
-    double dti = income == 0 ? 0.0 : expenses / income;
-    risk.setDtiRatio(dti);
+        if (existing.isPresent()) {
+            throw new BadRequestException("Risk already assessed");
+        }
 
-    double score = Math.max(0, Math.min(100,
-            100 - (dti * 100) + (profile.getCreditScore() - 600) / 3.0));
+        FinancialProfile profile = financialProfileRepository
+                .findByUserId(loanRequest.getUser().getId())
+                .orElseThrow(() -> new BadRequestException("Financial profile not found"));
 
-    risk.setRiskScore(score);
+        double income = profile.getMonthlyIncome();
+        double totalObligations =
+                profile.getMonthlyExpenses() + profile.getExistingLoanEmi();
 
-    return riskAssessmentRepository.save(risk);
+        double dtiRatio = income == 0 ? 0.0 : totalObligations / income;
+
+        double riskScore = Math.max(0, Math.min(100,
+                100 - (dtiRatio * 100) + (profile.getCreditScore() - 600) / 3.0));
+
+        RiskAssessment assessment = new RiskAssessment();
+        assessment.setLoanRequest(loanRequest);
+        assessment.setDtiRatio(dtiRatio);
+        assessment.setRiskScore(riskScore);
+
+        return riskAssessmentRepository.save(assessment);
+    }
+
+    @Override
+    public RiskAssessment getByLoanRequestId(Long loanRequestId) {
+        return riskAssessmentRepository.findByLoanRequestId(loanRequestId)
+                .orElseThrow(() -> new BadRequestException("Risk not found"));
+    }
 }
