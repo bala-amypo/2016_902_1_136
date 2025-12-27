@@ -12,7 +12,7 @@ public class EligibilityResult {
     private Long id;
     
     @OneToOne
-    @JoinColumn(name = "loan_request_id", nullable = false, unique = true)
+    @JoinColumn(name = "loan_request_id", nullable = false)
     private LoanRequest loanRequest;
     
     @Column(nullable = false)

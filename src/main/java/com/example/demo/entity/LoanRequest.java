@@ -34,11 +34,8 @@ public class LoanRequest {
     private LocalDateTime submittedAt;
     
     @PrePersist
-    public void onCreate() {
+    protected void onCreate() {
         submittedAt = LocalDateTime.now();
-        if (status == null) {
-            status = Status.PENDING.name();
-        }
     }
     
     public LoanRequest() {}
@@ -47,7 +44,6 @@ public class LoanRequest {
         this.user = user;
         this.requestedAmount = requestedAmount;
         this.tenureMonths = tenureMonths;
-        this.status = Status.PENDING.name();
     }
     
     // Getters and Setters
@@ -72,5 +68,6 @@ public class LoanRequest {
     public LocalDateTime getSubmittedAt() { return submittedAt; }
     public void setSubmittedAt(LocalDateTime submittedAt) { this.submittedAt = submittedAt; }
     
+    // Alias for test compatibility
     public LocalDateTime getAppliedAt() { return submittedAt; }
 }

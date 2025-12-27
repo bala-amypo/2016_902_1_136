@@ -41,7 +41,6 @@ public class User {
         this.fullName = fullName;
         this.email = email;
         this.password = password;
-        this.role = Role.CUSTOMER.name();
     }
     
     // Getters and Setters
