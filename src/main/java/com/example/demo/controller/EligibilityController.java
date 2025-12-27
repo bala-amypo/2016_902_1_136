@@ -2,35 +2,30 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.EligibilityResult;
 import com.example.demo.service.EligibilityService;
-
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/eligibility")
+@RequestMapping("/api/eligibility")
+@Tag(name = "Eligibility", description = "Loan eligibility evaluation")
 public class EligibilityController {
-
-    private final EligibilityService service;
-
-    public EligibilityController(EligibilityService service) {
-        this.service = service;
+    
+    private final EligibilityService eligibilityService;
+    
+    public EligibilityController(EligibilityService eligibilityService) {
+        this.eligibilityService = eligibilityService;
     }
-
-    @PostMapping("/{loanRequestId}")
-    public ResponseEntity<EligibilityResult> evaluate(
-            @PathVariable Long loanRequestId) {
-
-        return ResponseEntity.ok(
-                service.evaluateEligibility(loanRequestId)
-        );
+    
+    @PostMapping("/evaluate/{loanRequestId}")
+    public ResponseEntity<EligibilityResult> evaluateEligibility(@PathVariable Long loanRequestId) {
+        EligibilityResult result = eligibilityService.evaluateEligibility(loanRequestId);
+        return ResponseEntity.ok(result);
     }
-
-    @GetMapping("/{loanRequestId}")
-    public ResponseEntity<EligibilityResult> getResult(
-            @PathVariable Long loanRequestId) {
-
-        return ResponseEntity.ok(
-                service.getByLoanRequestId(loanRequestId)
-        );
+    
+    @GetMapping("/result/{loanRequestId}")
+    public ResponseEntity<EligibilityResult> getResult(@PathVariable Long loanRequestId) {
+        EligibilityResult result = eligibilityService.getByLoanRequestId(loanRequestId);
+        return ResponseEntity.ok(result);
     }
 }
