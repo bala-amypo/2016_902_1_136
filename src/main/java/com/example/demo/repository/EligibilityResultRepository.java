@@ -6,14 +6,9 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface EligibilityResultRepository extends JpaRepository<EligibilityResult, Long> {
-    Optional<EligibilityResult> findByLoanRequestId(Long loanRequestId);
-}
-
-
-
-
-
+// public interface EligibilityResultRepository extends JpaRepository<EligibilityResult, Long> {
+//     Optional<EligibilityResult> findByLoanRequestId(Long loanRequestId);
+//   }
 
 public interface EligibilityResultRepository
         extends JpaRepository<EligibilityResult, Long> {

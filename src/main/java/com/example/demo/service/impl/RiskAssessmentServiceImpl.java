@@ -84,3 +84,38 @@ public class RiskAssessmentServiceImpl implements RiskAssessmentService {
         return assessments.get(0);
     }
 }
+
+
+
+
+
+
+public RiskAssessment assessRisk(Long loanRequestId) {
+
+    LoanRequest loanRequest = loanRequestRepository.findById(loanRequestId)
+            .orElseThrow(() -> new BadRequestException("Loan request not found"));
+
+    if (riskAssessmentRepository.findByLoanRequestId(loanRequestId).isPresent()) {
+        throw new BadRequestException("Risk already assessed");
+    }
+
+    FinancialProfile profile = financialProfileRepository
+            .findByUserId(loanRequest.getUser().getId())
+            .orElseThrow(() -> new BadRequestException("Financial profile not found"));
+
+    RiskAssessment risk = new RiskAssessment();
+    risk.setLoanRequest(loanRequest);
+
+    double income = profile.getMonthlyIncome();
+    double expenses = profile.getMonthlyExpenses() + profile.getExistingLoanEmi();
+
+    double dti = income == 0 ? 0.0 : expenses / income;
+    risk.setDtiRatio(dti);
+
+    double score = Math.max(0, Math.min(100,
+            100 - (dti * 100) + (profile.getCreditScore() - 600) / 3.0));
+
+    risk.setRiskScore(score);
+
+    return riskAssessmentRepository.save(risk);
+}
