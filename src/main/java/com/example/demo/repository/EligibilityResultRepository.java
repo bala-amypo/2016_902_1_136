@@ -9,3 +9,14 @@ import java.util.Optional;
 public interface EligibilityResultRepository extends JpaRepository<EligibilityResult, Long> {
     Optional<EligibilityResult> findByLoanRequestId(Long loanRequestId);
 }
+
+
+
+
+
+
+public interface EligibilityResultRepository
+        extends JpaRepository<EligibilityResult, Long> {
+
+    Optional<EligibilityResult> findByLoanRequestId(Long loanRequestId);
+}
