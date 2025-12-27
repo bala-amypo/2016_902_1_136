@@ -1,7 +1,6 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.LoanRequest;
-import com.example.demo.entity.User;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.LoanRequestRepository;
@@ -25,8 +24,9 @@ public class LoanRequestServiceImpl implements LoanRequestService {
     @Override
     public LoanRequest submitRequest(LoanRequest request) {
         // Validate user exists
-        User user = userRepository.findById(request.getUser().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        if (!userRepository.existsById(request.getUser().getId())) {
+            throw new ResourceNotFoundException("User not found");
+        }
         
         // Validate requested amount
         if (request.getRequestedAmount() <= 0) {
@@ -38,9 +38,7 @@ public class LoanRequestServiceImpl implements LoanRequestService {
             throw new BadRequestException("Tenure months must be greater than 0");
         }
         
-        request.setUser(user);
         request.setStatus(LoanRequest.Status.PENDING.name());
-        
         return loanRequestRepository.save(request);
     }
     

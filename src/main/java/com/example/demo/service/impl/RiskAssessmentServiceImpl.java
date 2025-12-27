@@ -33,7 +33,7 @@ public class RiskAssessmentServiceImpl implements RiskAssessmentService {
         // Check if already assessed
         List<RiskAssessment> existing = riskAssessmentRepository.findByLoanRequestId(loanRequestId);
         if (!existing.isEmpty()) {
-            throw new BadRequestException("Risk already assessed");
+            throw new BadRequestException("Risk already assessed for this loan request");
         }
         
         LoanRequest loanRequest = loanRequestRepository.findById(loanRequestId)
@@ -58,11 +58,18 @@ public class RiskAssessmentServiceImpl implements RiskAssessmentService {
         
         // Calculate risk score (0-100)
         double riskScore = 0.0;
-        riskScore += (900 - profile.getCreditScore()) / 6.0; // Credit score component
-        riskScore += dtiRatio * 50; // DTI component
-        riskScore = Math.min(100.0, Math.max(0.0, riskScore));
+        if (dtiRatio > 0.5) riskScore += 40;
+        else if (dtiRatio > 0.3) riskScore += 20;
         
-        RiskAssessment assessment = new RiskAssessment(loanRequestId, dtiRatio, creditCheckStatus);
+        if (profile.getCreditScore() < 600) riskScore += 40;
+        else if (profile.getCreditScore() < 700) riskScore += 20;
+        
+        if (profile.getSavingsBalance() < loanRequest.getRequestedAmount() * 0.1) riskScore += 20;
+        
+        RiskAssessment assessment = new RiskAssessment();
+        assessment.setLoanRequestId(loanRequestId);
+        assessment.setDtiRatio(dtiRatio);
+        assessment.setCreditCheckStatus(creditCheckStatus);
         assessment.setRiskScore(riskScore);
         
         return riskAssessmentRepository.save(assessment);
