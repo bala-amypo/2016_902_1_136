@@ -1,4 +1,4 @@
--- Active: 1766467808923@@127.0.0.1@3306
+
 // package com.example.demo.service.impl;
 
 // import com.example.demo.entity.FinancialProfile;
@@ -84,8 +84,7 @@
 //         }
 //         return assessments.get(0);
 //     }
-//  }
-package com.example.demo.service.impl;
+//  }package com.example.demo.service.impl;
 
 import com.example.demo.entity.FinancialProfile;
 import com.example.demo.entity.LoanRequest;
@@ -119,31 +118,3 @@ public class RiskAssessmentServiceImpl implements RiskAssessmentService {
 
         if (riskAssessmentRepository.findByLoanRequestId(loanRequestId).isPresent()) {
             throw new BadRequestException("Risk already assessed");
-        }
-
-        FinancialProfile profile = financialProfileRepository
-                .findByUserId(loanRequest.getUser().getId())
-                .orElseThrow(() -> new BadRequestException("Financial profile not found"));
-
-        double income = profile.getMonthlyIncome();
-        double obligations =
-                profile.getMonthlyExpenses() + profile.getExistingLoanEmi();
-
-        double dtiRatio = income == 0 ? 0.0 : obligations / income;
-
-        double riskScore = Math.max(0, Math.min(100,
-                100 - (dtiRatio * 100) + (profile.getCreditScore() - 600) / 3.0));
-
-        RiskAssessment assessment = new RiskAssessment();
-        assessment.setDtiRatio(dtiRatio);
-        assessment.setRiskScore(riskScore);
-
-        return riskAssessmentRepository.save(assessment);
-    }
-
-    @Override
-    public RiskAssessment getByLoanRequestId(Long loanRequestId) {
-        return riskAssessmentRepository.findByLoanRequestId(loanRequestId)
-                .orElseThrow(() -> new BadRequestException("Risk not found"));
-    }
-}
