@@ -19,8 +19,8 @@ public class EligibilityServiceImpl implements EligibilityService {
     private final EligibilityResultRepository eligibilityResultRepository;
     
     public EligibilityServiceImpl(LoanRequestRepository loanRequestRepository, 
-                                 FinancialProfileRepository financialProfileRepository,
-                                 EligibilityResultRepository eligibilityResultRepository) {
+                                FinancialProfileRepository financialProfileRepository,
+                                EligibilityResultRepository eligibilityResultRepository) {
         this.loanRequestRepository = loanRequestRepository;
         this.financialProfileRepository = financialProfileRepository;
         this.eligibilityResultRepository = eligibilityResultRepository;
@@ -30,7 +30,7 @@ public class EligibilityServiceImpl implements EligibilityService {
     public EligibilityResult evaluateEligibility(Long loanRequestId) {
         // Check if already evaluated
         if (eligibilityResultRepository.findByLoanRequestId(loanRequestId).isPresent()) {
-            throw new BadRequestException("Eligibility already evaluated");
+            throw new BadRequestException("Eligibility already evaluated for this loan request");
         }
         
         LoanRequest loanRequest = loanRequestRepository.findById(loanRequestId)
@@ -41,7 +41,7 @@ public class EligibilityServiceImpl implements EligibilityService {
         
         // Calculate DTI ratio
         double totalObligations = profile.getMonthlyExpenses() + (profile.getExistingLoanEmi() != null ? profile.getExistingLoanEmi() : 0.0);
-        double dtiRatio = profile.getMonthlyIncome() > 0 ? totalObligations / profile.getMonthlyIncome() : 0.0;
+        double dtiRatio = totalObligations / profile.getMonthlyIncome();
         
         // Determine eligibility
         boolean isEligible = true;
@@ -67,10 +67,15 @@ public class EligibilityServiceImpl implements EligibilityService {
             maxEligibleAmount = Math.min(loanRequest.getRequestedAmount(), availableIncome * loanRequest.getTenureMonths() * 0.8);
         }
         
-        // Calculate estimated EMI
+        // Calculate EMI
         double estimatedEmi = maxEligibleAmount > 0 ? maxEligibleAmount / loanRequest.getTenureMonths() : 0.0;
         
-        EligibilityResult result = new EligibilityResult(loanRequest, isEligible, maxEligibleAmount, estimatedEmi, riskLevel);
+        EligibilityResult result = new EligibilityResult();
+        result.setLoanRequest(loanRequest);
+        result.setIsEligible(isEligible);
+        result.setMaxEligibleAmount(maxEligibleAmount);
+        result.setEstimatedEmi(estimatedEmi);
+        result.setRiskLevel(riskLevel);
         result.setRejectionReason(rejectionReason);
         
         return eligibilityResultRepository.save(result);

@@ -1,7 +1,6 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.FinancialProfile;
-import com.example.demo.entity.User;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.FinancialProfileRepository;
@@ -25,8 +24,9 @@ public class FinancialProfileServiceImpl implements FinancialProfileService {
     @Override
     public FinancialProfile createOrUpdate(FinancialProfile profile) {
         // Validate user exists
-        User user = userRepository.findById(profile.getUser().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        if (!userRepository.existsById(profile.getUser().getId())) {
+            throw new ResourceNotFoundException("User not found");
+        }
         
         // Validate credit score
         if (profile.getCreditScore() < 300 || profile.getCreditScore() > 900) {
@@ -38,10 +38,9 @@ public class FinancialProfileServiceImpl implements FinancialProfileService {
             throw new BadRequestException("Monthly income must be greater than 0");
         }
         
-        // Check if profile already exists for this user
-        Optional<FinancialProfile> existing = financialProfileRepository.findByUserId(user.getId());
+        // Check if profile already exists for update
+        Optional<FinancialProfile> existing = financialProfileRepository.findByUserId(profile.getUser().getId());
         if (existing.isPresent()) {
-            // Update existing profile
             FinancialProfile existingProfile = existing.get();
             existingProfile.setMonthlyIncome(profile.getMonthlyIncome());
             existingProfile.setMonthlyExpenses(profile.getMonthlyExpenses());
@@ -51,7 +50,6 @@ public class FinancialProfileServiceImpl implements FinancialProfileService {
             return financialProfileRepository.save(existingProfile);
         }
         
-        profile.setUser(user);
         return financialProfileRepository.save(profile);
     }
     
