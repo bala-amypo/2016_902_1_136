@@ -1,0 +1,16 @@
+package com.example.demo.listener;
+
+public class TestResultListener {
+    
+    public void onTestStart(Object result) {
+        System.out.println("Test started");
+    }
+    
+    public void onTestSuccess(Object result) {
+        System.out.println("Test passed");
+    }
+    
+    public void onTestFailure(Object result) {
+        System.out.println("Test failed");
+    }
+}
