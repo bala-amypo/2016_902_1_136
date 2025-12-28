@@ -7,10 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-// public interface RiskAssessmentRepository extends JpaRepository<RiskAssessment, Long> {
-//     List<RiskAssessment> findByLoanRequestId(Long loanRequestId);
-//    }
-
 public interface RiskAssessmentRepository
         extends JpaRepository<RiskAssessment, Long> {
 
