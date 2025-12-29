@@ -62,46 +62,6 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 
-// @Entity
-// public class RiskAssessment {
-
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     private Long id;
-
-//     @OneToOne
-//     private LoanRequest loanRequest; // Make sure this exists
-
-//     private Double riskScore;
-
-//     private Double dtiRatio;
-
-//     // ✅ Add getter and setter
-//     public LoanRequest getLoanRequest() {
-//         return loanRequest;
-//     }
-
-//     public void setLoanRequest(LoanRequest loanRequest) {
-//         this.loanRequest = loanRequest;
-//     }
-
-//     public Double getRiskScore() {
-//         return riskScore;
-//     }
-
-//     public void setRiskScore(Double riskScore) {
-//         this.riskScore = riskScore;
-//     }
-
-//     public Double getDtiRatio() {
-//         return dtiRatio;
-//     }
-
-//     public void setDtiRatio(Double dtiRatio) {
-//         this.dtiRatio = dtiRatio;
-//     }
-// }
-
 @Entity
 public class RiskAssessment {
 
@@ -109,13 +69,35 @@ public class RiskAssessment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // other fields...
+    @OneToOne
+    private LoanRequest loanRequest; // Make sure this exists
 
-    public Long getId() {
-        return id;
+    private Double riskScore;
+
+    private Double dtiRatio;
+
+    // ✅ Add getter and setter
+    public LoanRequest getLoanRequest() {
+        return loanRequest;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setLoanRequest(LoanRequest loanRequest) {
+        this.loanRequest = loanRequest;
+    }
+
+    public Double getRiskScore() {
+        return riskScore;
+    }
+
+    public void setRiskScore(Double riskScore) {
+        this.riskScore = riskScore;
+    }
+
+    public Double getDtiRatio() {
+        return dtiRatio;
+    }
+
+    public void setDtiRatio(Double dtiRatio) {
+        this.dtiRatio = dtiRatio;
     }
 }
