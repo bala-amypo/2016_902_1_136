@@ -1,4 +1,4 @@
-package com.example.demo;
+pac9kage com.example.demo;
 
 import com.example.demo.controller.*;
 import com.example.demo.dto.AuthRequest;
