@@ -64,16 +64,35 @@ import com.example.demo.entity.EligibilityResult;
 import com.example.demo.service.EligibilityService;
 import org.springframework.stereotype.Service;
 
+// @Service
+// public class EligibilityServiceImpl implements EligibilityService {
+
+//     @Override
+//     public EligibilityResult evaluateEligibility(Long loanRequestId) {
+//         return new EligibilityResult();
+//     }
+
+//     @Override
+//     public EligibilityResult getByLoanRequestId(Long loanRequestId) {
+//         return new EligibilityResult();
+//     }
+// }
+
 @Service
 public class EligibilityServiceImpl implements EligibilityService {
 
-    @Override
-    public EligibilityResult evaluateEligibility(Long loanRequestId) {
-        return new EligibilityResult();
+    private final LoanRequestRepository loanRequestRepository;
+    private final FinancialProfileRepository financialProfileRepository;
+    private final EligibilityResultRepository eligibilityResultRepository;
+
+    // ✅ Constructor that accepts repositories
+    public EligibilityServiceImpl(LoanRequestRepository loanRequestRepository,
+                                  FinancialProfileRepository financialProfileRepository,
+                                  EligibilityResultRepository eligibilityResultRepository) {
+        this.loanRequestRepository = loanRequestRepository;
+        this.financialProfileRepository = financialProfileRepository;
+        this.eligibilityResultRepository = eligibilityResultRepository;
     }
 
-    @Override
-    public EligibilityResult getByLoanRequestId(Long loanRequestId) {
-        return new EligibilityResult();
-    }
+    // ... rest of service methods
 }
