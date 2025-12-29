@@ -70,13 +70,22 @@ public class RiskAssessment {
     private Long id;
 
     @OneToOne
-    private LoanRequest loanRequest; // Make sure this exists
+    private LoanRequest loanRequest;
 
     private Double riskScore;
 
     private Double dtiRatio;
 
-    // ✅ Add getter and setter
+    // Getter and Setter for id
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    // Other getters and setters
     public LoanRequest getLoanRequest() {
         return loanRequest;
     }
