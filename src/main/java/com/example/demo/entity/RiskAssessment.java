@@ -1,59 +1,103 @@
+// package com.example.demo.entity;
+
+// import jakarta.persistence.*;
+// import java.time.LocalDateTime;
+
+// @Entity
+// @Table(name = "risk_assessments")
+// public class RiskAssessment {
+    
+//     @Id
+//     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//     private Long id;
+    
+//     @Column(nullable = false)
+//     private Long loanRequestId;
+    
+//     @Column(nullable = false)
+//     private Double dtiRatio;
+    
+//     @Column(nullable = false)
+//     private String creditCheckStatus;
+    
+//     @Column(nullable = false)
+//     private LocalDateTime timestamp;
+    
+//     private Double riskScore;
+    
+//     @PrePersist
+//     protected void onCreate() {
+//         timestamp = LocalDateTime.now();
+//     }
+    
+//     public RiskAssessment() {}
+    
+//     public RiskAssessment(Long loanRequestId, Double dtiRatio, String creditCheckStatus) {
+//         this.loanRequestId = loanRequestId;
+//         this.dtiRatio = dtiRatio;
+//         this.creditCheckStatus = creditCheckStatus;
+//     }
+    
+//     // Getters and Setters
+//     public Long getId() { return id; }
+//     public void setId(Long id) { this.id = id; }
+    
+//     public Long getLoanRequestId() { return loanRequestId; }
+//     public void setLoanRequestId(Long loanRequestId) { this.loanRequestId = loanRequestId; }
+    
+//     public Double getDtiRatio() { return dtiRatio; }
+//     public void setDtiRatio(Double dtiRatio) { this.dtiRatio = dtiRatio; }
+    
+//     public String getCreditCheckStatus() { return creditCheckStatus; }
+//     public void setCreditCheckStatus(String creditCheckStatus) { this.creditCheckStatus = creditCheckStatus; }
+    
+//     public LocalDateTime getTimestamp() { return timestamp; }
+//     public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
+    
+//     public Double getRiskScore() { return riskScore; }
+//     public void setRiskScore(Double riskScore) { this.riskScore = riskScore; }
+// }
+
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "risk_assessments")
 public class RiskAssessment {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(nullable = false)
-    private Long loanRequestId;
-    
-    @Column(nullable = false)
-    private Double dtiRatio;
-    
-    @Column(nullable = false)
-    private String creditCheckStatus;
-    
-    @Column(nullable = false)
-    private LocalDateTime timestamp;
-    
+
+    @OneToOne
+    private LoanRequest loanRequest; // Make sure this exists
+
     private Double riskScore;
-    
-    @PrePersist
-    protected void onCreate() {
-        timestamp = LocalDateTime.now();
+
+    private Double dtiRatio;
+
+    // ✅ Add getter and setter
+    public LoanRequest getLoanRequest() {
+        return loanRequest;
     }
-    
-    public RiskAssessment() {}
-    
-    public RiskAssessment(Long loanRequestId, Double dtiRatio, String creditCheckStatus) {
-        this.loanRequestId = loanRequestId;
+
+    public void setLoanRequest(LoanRequest loanRequest) {
+        this.loanRequest = loanRequest;
+    }
+
+    public Double getRiskScore() {
+        return riskScore;
+    }
+
+    public void setRiskScore(Double riskScore) {
+        this.riskScore = riskScore;
+    }
+
+    public Double getDtiRatio() {
+        return dtiRatio;
+    }
+
+    public void setDtiRatio(Double dtiRatio) {
         this.dtiRatio = dtiRatio;
-        this.creditCheckStatus = creditCheckStatus;
     }
-    
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    
-    public Long getLoanRequestId() { return loanRequestId; }
-    public void setLoanRequestId(Long loanRequestId) { this.loanRequestId = loanRequestId; }
-    
-    public Double getDtiRatio() { return dtiRatio; }
-    public void setDtiRatio(Double dtiRatio) { this.dtiRatio = dtiRatio; }
-    
-    public String getCreditCheckStatus() { return creditCheckStatus; }
-    public void setCreditCheckStatus(String creditCheckStatus) { this.creditCheckStatus = creditCheckStatus; }
-    
-    public LocalDateTime getTimestamp() { return timestamp; }
-    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
-    
-    public Double getRiskScore() { return riskScore; }
-    public void setRiskScore(Double riskScore) { this.riskScore = riskScore; }
 }
