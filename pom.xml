@@ -121,9 +121,9 @@
                 <version>3.2.5</version>
                 <configuration>
                     <useJUnitPlatform>false</useJUnitPlatform>
-                    <includes>
-                        <include>**/*Test.java</include>
-                    </includes>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
                 </configuration>
             </plugin>
 
